@@ -1,0 +1,584 @@
+﻿<!doctype html>
+<html lang="vi" data-lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <!-- These are overwritten by JS applyLanguage(), but set sensible defaults anyway -->
+    <title>Thùy Phương & Mitchell Lachlan - Thiệp cưới</title>
+    <meta name="description" content="Thiệp mời cưới của Thùy Phương và Mitchell Lachlan - 24/01/2026" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+VN:wght@100..400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body class="locked">
+    <!-- Tap-to-enter overlay -->
+    <div id="enterOverlay"
+         class="overlay overlay-invite"
+         role="dialog"
+         aria-modal="true"
+         data-i18n-attr="aria-label:overlay.openInvitation">
+
+        <div class="invite-stage">
+            <div id="inviteCard"
+                 class="invite-card"
+                 role="button"
+                 tabindex="0"
+                 data-i18n-attr="aria-label:overlay.flipInvitation">
+                <div class="invite-card-inner">
+                    <!-- FRONT -->
+                    <div class="invite-face invite-front" aria-hidden="false">
+                        <div class="invite-paper">
+                            <div class="invite-left">
+                                <div class="invite-topline">
+                                    <span class="save" data-i18n="overlay.save">SAVE</span>
+                                    <span class="the" data-i18n="overlay.the">the</span>
+                                    <span class="date" data-i18n="overlay.date">DATE</span>
+                                </div>
+
+                                <div class="invite-names">
+                                    <span class="script">Lachlan</span>
+                                    <span class="amp">&</span>
+                                    <span class="script">Phương</span>
+                                </div>
+
+                                <div class="invite-small" data-i18n="overlay.inviteLine">Thân mời</div>
+                            </div>
+
+                            <div class="invite-datecol" aria-hidden="true">
+                                <div class="big">24</div>
+                                <div class="big">01</div>
+                                <div class="big">26</div>
+                            </div>
+                        </div>
+
+                        <div class="tap-hint" data-i18n="overlay.tapToOpen">Tap to open</div>
+                    </div>
+
+                    <!-- BACK -->
+                    <div class="invite-face invite-back" aria-hidden="true">
+                        <div class="invite-paper invite-paper-back">
+                            <div class="envelope-flap" aria-hidden="true"></div>
+                            <div class="seal-area">
+                                <button id="sealBtn"
+                                        class="wax-seal"
+                                        type="button"
+                                        data-i18n-attr="aria-label:overlay.breakSeal"></button>
+
+                                <div class="seal-hand" aria-hidden="true"></div>
+
+                                <span class="sr-only" data-i18n="overlay.tapSealToEnter">Tap the seal to enter</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sr-only" aria-live="polite" id="overlayStatus"></div>
+        </div>
+    </div>
+
+    <!-- Background music (starts only after user interaction) -->
+    <audio id="bgMusic" preload="auto" loop>
+        <source src="./assets/music/song2.mp3" type="audio/mpeg" />
+        <span data-i18n="audio.unsupported">Your browser does not support the audio element.</span>
+    </audio>
+
+    <!-- Top bar -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="topbar-title" data-i18n-attr="aria-label:topbar.titleAria">
+                <span class="script">Thúy Phương</span>
+                <span class="amp">&</span>
+                <span class="script">Mitchell Lachlan</span>
+            </div>
+
+            <div class="topbar-actions">
+                <button id="musicToggle"
+                        class="btn btn-small"
+                        aria-pressed="false"
+                        type="button"
+                        data-i18n-attr="title:topbar.musicTitle;aria-label:topbar.musicAria">
+                    Music: Off
+                </button>
+
+                <button id="langToggle"
+                        class="btn btn-small"
+                        aria-pressed="true"
+                        type="button"
+                        data-i18n-attr="title:topbar.langTitle;aria-label:topbar.langAria">
+                    Ngôn ngữ: VI
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero hero-full" data-i18n-attr="aria-label:hero.sectionAria">
+            <div class="hero-bg" aria-hidden="true"></div>
+            <!-- <canvas id="fireworksCanvas" aria-hidden="true"></canvas> -->
+
+            <div class="hero-content">
+                <div class="script hero-script" data-i18n="hero.gettingMarried">We’re getting married!</div>
+
+                <h1 class="hero-title" data-i18n-attr="aria-label:hero.titleAria">
+                    Thúy Phương <span class="amp">&</span> Mitchell Lachlan
+                </h1>
+
+                <div class="hero-date" data-i18n-attr="aria-label:hero.dateAria">24.01.2026</div>
+            </div>
+        </section>
+
+        <!-- Date Banner / Countdown -->
+        <section class="section alt date-banner" id="date" data-i18n-attr="aria-label:dateBanner.sectionAria">
+            <div class="date-inner">
+                <div class="date-monogram" aria-hidden="true">
+                    <span class="mono-a">P</span>
+                    <span class="mono-b">L</span>
+                </div>
+
+                <div class="date-lead reveal-on-scroll" data-i18n-html="dateBanner.lead">
+                    WE WILL BECOME<br>HUSBAND AND WIFE IN
+                </div>
+
+                <div class="date-timer reveal-on-scroll"
+                     role="timer"
+                     aria-live="polite"
+                     data-i18n-attr="aria-label:dateBanner.timerAria">
+                    <span class="t" id="cdDays">—</span><span class="sep">:</span>
+                    <span class="t" id="cdHours">—</span><span class="sep">:</span>
+                    <span class="t" id="cdMins">—</span><span class="sep">:</span>
+                    <span class="t" id="cdSecs">—</span>
+                </div>
+
+                <div class="date-collage" aria-hidden="true">
+                    <div class="env-stage">
+                        <div class="date-floral" aria-hidden="true">
+                            <img src="./assets/drawings/flowerdrawing.svg" alt="" loading="lazy" decoding="async" />
+                        </div>
+
+                        <!-- Polaroids live ABOVE the envelope, BELOW debug lines -->
+                        <div class="date-polaroids" aria-hidden="true">
+                            <figure class="date-polaroid p1"><img src="./assets/photos/01.jpg" alt="" loading="lazy" decoding="async"></figure>
+                            <figure class="date-polaroid p2"><img src="./assets/photos/03.jpg" alt="" loading="lazy" decoding="async"></figure>
+                            <figure class="date-polaroid p3"><img src="./assets/photos/02.jpg" alt="" loading="lazy" decoding="async"></figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Save The Date -->
+        <section id="portrait"
+                 class="save-date-hero-section"
+                 data-i18n-attr="aria-label:saveDate.sectionAria"
+                 data-reveal-rootmargin="0px 0px -25% 0px"
+                 style="--sd-photo:url('./assets/photos/Aus\ Photos/IMG_0383.JPG'); --sd-photo-pos:center;">
+            <div class="save-date-bg" aria-hidden="true"></div>
+
+            <div class="save-date-title" data-i18n-attr="aria-label:saveDate.titleAria">
+                <div class="sd-word sd-save" data-i18n="saveDate.save">SAVE</div>
+                <div class="sd-word sd-the" data-i18n="saveDate.the">the</div>
+                <div class="sd-word sd-date" data-i18n="saveDate.date">DATE</div>
+            </div>
+        </section>
+
+        <!-- Childhood / Kids Photos -->
+        <section id="childhood" class="childhood-section" data-i18n-attr="aria-label:childhood.sectionAria">
+            <div class="childhood-inner">
+                <header class="childhood-header">
+                    <h2 class="childhood-title" data-i18n="childhood.title">When We Were Little</h2>
+                    <p class="childhood-subtitle" data-i18n="childhood.subtitle">A tiny throwback before the big day.</p>
+                </header>
+
+                <div class="childhood-stage" data-i18n-attr="aria-label:childhood.stageAria">
+                    <img class="childhood-photo childhood-photo--left"
+                         src="./assets/photos/groom_childhood_photo.jpg"
+                         loading="lazy"
+                         data-i18n-attr="alt:childhood.rightAlt" />
+
+                    <img class="childhood-photo childhood-photo--right"
+                         src="./assets/photos/bride_childhood_photo.jpg"
+                         loading="lazy"
+                         data-i18n-attr="alt:childhood.leftAlt" />
+
+                    <img class="childhood-outline"
+                         src="./assets/drawings/two_people_holding_pictures.svg"
+                         alt=""
+                         aria-hidden="true"
+                         loading="lazy" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Family Details -->
+        <section id="family" class="section family-details-section" data-i18n-attr="aria-label:family.sectionAria">
+            <div class="family-card">
+                <div class="family-top">
+                    <div class="family-col">
+                        <div class="family-head" data-i18n="family.brideSideHead">NHÀ GÁI</div>
+                        <div class="family-body" data-i18n-html="family.brideSideBody">
+                            Ong: Truong Ky Phong<br />
+                            Ba: Nguyen Thanh Thao<br />
+                            Dia chi: Ap Binh Phu, xa Nhon Trach, Tinh Dong Nai (dia chi moi)
+                        </div>
+                    </div>
+
+                    <div class="family-divider" aria-hidden="true"></div>
+
+                    <div class="family-col">
+                        <div class="family-head" data-i18n="family.groomSideHead">NHÀ TRAI</div>
+                        <div class="family-body" data-i18n-html="family.groomSideBody">
+                            Ong: Cook Lenard Leslie<br />
+                            Ba: Cook Amy Michelle<br />
+                            Dia chi: Melbourne - VIC Australia
+                        </div>
+                    </div>
+                </div>
+
+                <div class="family-invite" data-i18n="family.inviteLine">
+                    Thân mời đến dự lễ thành hôn của chúng tôi!
+                </div>
+
+                <div class="family-couple" data-i18n-attr="aria-label:family.coupleAria">
+                    <div class="family-name">THÚY PHƯƠNG</div>
+                    <div class="family-and" aria-hidden="true" data-i18n="family.andWord">and</div>
+                    <div class="family-name">MITCHELL LACHLAN</div>
+                </div>
+
+                <div class="family-when" data-i18n-attr="aria-label:family.whenAria">
+                    <div class="family-when-label" data-i18n="family.whenLabel">Được tổ chức vào lúc</div>
+                    <div class="family-rule" aria-hidden="true"></div>
+                    <div class="family-when-main" data-i18n="family.whenMain">10:30 - THU BAY</div>
+                    <div class="family-date">24.01.2026</div>
+                    <div class="family-when-address" data-i18n="family.address">1551 Ly Thai To, Long Tan, Nhon Trach, Dong Nai, Vietnam</div>
+                    <div class="family-rule" aria-hidden="true"></div>
+                </div>
+
+                <a class="family-directions"
+                   href="#location"
+                   data-i18n-attr="aria-label:family.directionsAria">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 22s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M12 13.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" stroke="currentColor" stroke-width="1.8" />
+                    </svg>
+                    <span data-i18n="family.directionsBtn">CHỈ ĐƯỜNG</span>
+                </a>
+            </div>
+
+            <div class="family-emboss" aria-hidden="true">
+                <img src="./assets/drawings/embossed_flower_vertical.png" alt="" loading="lazy" decoding="async" />
+            </div>
+        </section>
+
+        <!-- The Story of Love -->
+        <section id="story" class="section story-of-love-section" data-i18n-attr="aria-label:story.sectionAria" data-reveal-rootmargin="0px 0px -30% 0px">
+            <div class="story-flower" aria-hidden="true">
+                <img src="./assets/drawings/flower5.png" alt="" loading="lazy" decoding="async" />
+            </div>
+            <div class="story-love-card">
+                <div class="story-love-title" data-i18n-attr="aria-label:story.titleAria">
+                    <span class="t-a" data-i18n="story.titleA">THE STORY</span>
+                    <span class="t-of" data-i18n="story.titleOf">of</span>
+                    <span class="t-b" data-i18n="story.titleB">LOVE</span>
+                </div>
+
+                <div class="story-intro reveal-on-scroll">
+                    <div class="story-polaroid-collage" data-i18n-attr="aria-label:story.cardsAria">
+                        <figure class="polaroid polaroid-photo polaroid-bride-photo">
+                            <img src="./assets/photos/Edited Photos/RIC_9582.jpg"
+                                 loading="lazy"
+                                 decoding="async"
+                                 data-i18n-attr="alt:story.bridePhotoAlt">
+                        </figure>
+
+                        <div class="story-info story-info-bride" data-i18n-attr="aria-label:story.brideInfoAria">
+                            <div class="story-info-role script" data-i18n="story.brideRole">Cô dâu</div>
+                            <div class="story-info-name">
+                                <span>THÚY</span>
+                                <span>PHƯƠNG</span>
+                            </div>
+                        </div>
+
+                        <div class="story-info story-info-groom" data-i18n-attr="aria-label:story.groomInfoAria">
+                            <div class="story-info-role script" data-i18n="story.groomRole">Chú rể</div>
+                            <div class="story-info-name">
+                                <span>MITCHELL</span>
+                                <span>LACHLAN</span>
+                            </div>
+                        </div>
+
+                        <figure class="polaroid polaroid-photo polaroid-groom-photo">
+                            <img src="./assets/photos/Edited Photos/RIC_9678.jpg"
+                                 loading="lazy"
+                                 decoding="async"
+                                 data-i18n-attr="alt:story.groomPhotoAlt">
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="story-timeline-list" data-i18n-attr="aria-label:story.timelineAria">
+                    <div class="tl-item reveal-on-scroll">
+                        <div class="tl-mark" aria-hidden="true"><span class="tl-dot"></span></div>
+                        <div class="tl-content">
+                            <div class="tl-title" data-i18n="story.y2022.title">2022 - GẶP GỠ ĐỊNH MỆNH</div>
+                            <p class="tl-text" data-i18n="story.y2022.text">(Viết câu chuyện của bạn ở đây…)</p>
+                        </div>
+                    </div>
+
+                    <div class="tl-item reveal-on-scroll">
+                        <div class="tl-mark" aria-hidden="true"><span class="tl-dot"></span></div>
+                        <div class="tl-content">
+                            <div class="tl-title" data-i18n="story.y2023.title">2023 - HẸN HÒ</div>
+                            <p class="tl-text" data-i18n="story.y2023.text">(Viết câu chuyện của bạn ở đây…)</p>
+                        </div>
+                    </div>
+
+                    <div class="tl-item reveal-on-scroll">
+                        <div class="tl-mark" aria-hidden="true"><span class="tl-dot"></span></div>
+                        <div class="tl-content">
+                            <div class="tl-title" data-i18n="story.y2024.title">2024 - LỜI HỨA</div>
+                            <p class="tl-text" data-i18n="story.y2024.text">(Viết câu chuyện của bạn ở đây…)</p>
+                        </div>
+                    </div>
+
+                    <div class="tl-item reveal-on-scroll">
+                        <div class="tl-mark" aria-hidden="true"><span class="tl-dot"></span></div>
+                        <div class="tl-content">
+                            <div class="tl-title" data-i18n="story.y2025.title">2025 - CẦU HÔN</div>
+                            <p class="tl-text" data-i18n="story.y2025.text">(Viết câu chuyện của bạn ở đây…)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Album of Love -->
+        <section id="album" class="section album-of-love-section" data-i18n-attr="aria-label:album.sectionAria">
+            <div class="album-flower" aria-hidden="true">
+                <img src="./assets/drawings/flower4.png" alt="" loading="lazy" decoding="async" />
+            </div>
+            <div class="album-filmstrip reveal-on-scroll" data-i18n-attr="aria-label:album.filmstripAria">
+                <div id="albumTrack" class="album-filmtrack"></div>
+            </div>
+
+            <div class="album-wrap reveal-on-scroll">
+                <div class="album-collage" data-i18n-attr="aria-label:album.collageAria">
+                    <div class="album-card album-card-text album-card-title" data-i18n-attr="aria-label:album.titleAria">
+                        <div class="album-text-row">
+                            <span class="album-the script" data-i18n="album.the">The</span>
+                            <span class="album-word album-word-strong" data-i18n="album.album">ALBUM</span>
+                        </div>
+                    </div>
+
+                    <figure class="album-card album-card-photo album-card-main">
+                        <img src="./assets/photos/03.jpg" loading="lazy" decoding="async" data-i18n-attr="alt:album.photoAlt">
+                    </figure>
+
+                    <figure class="album-card album-card-photo album-card-small">
+                        <img src="./assets/photos/04.jpg" loading="lazy" decoding="async" data-i18n-attr="alt:album.photoAlt">
+                    </figure>
+
+                    <div class="album-card album-card-text album-card-sub" data-i18n-attr="aria-label:album.subAria">
+                        <div class="album-text-row">
+                            <span class="album-word" data-i18n="album.of">OF</span>
+                            <span class="album-word" data-i18n="album.love">LOVE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery -->
+        <section id="gallery" class="section gallery-viewer-section" data-i18n-attr="aria-label:gallery.sectionAria">
+            <div class="gallery-stage" tabindex="0" data-i18n-attr="aria-label:gallery.stageAria">
+                <button class="gallery-arrow gallery-arrow-left"
+                        type="button"
+                        data-i18n-attr="aria-label:gallery.prevAria"></button>
+
+                <div class="gallery-frame" data-i18n-attr="aria-label:gallery.selectedAria">
+                    <img id="galleryMainImg"
+                         class="gallery-mainimg"
+                         src="./assets/photos/01.jpg"
+                         data-i18n-attr="alt:gallery.mainAlt">
+                </div>
+
+                <button class="gallery-arrow gallery-arrow-right"
+                        type="button"
+                        data-i18n-attr="aria-label:gallery.nextAria"></button>
+            </div>
+
+            <div id="galleryThumbs" class="gallery-thumbs" data-i18n-attr="aria-label:gallery.thumbsAria"></div>
+        </section>
+
+        <!-- Dress Code -->
+        <section id="dress" class="section dress-code-section" data-i18n-attr="aria-label:dress.sectionAria">
+            <div class="dress-code-inner">
+                <div class="dress-code-title" data-i18n="dress.title">DRESS CODE</div>
+                <div id="dressDots" class="dress-code-dots" data-i18n-attr="aria-label:dress.dotsAria"></div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section id="timeline"
+                 class="timeline-hero-section"
+                 data-i18n-attr="aria-label:timeline.sectionAria"
+                 data-reveal-rootmargin="0px 0px -30% 0px"
+                 style="--tl-photo:url('./assets/photos/04.jpg'); --tl-photo-pos:center;">
+            <div class="timeline-bg" aria-hidden="true"></div>
+
+            <div class="timeline-overlay" aria-hidden="false">
+                <div class="timeline-title" data-i18n="timeline.title">TIMELINE</div>
+
+                <div class="timeline-rail" role="list" data-i18n-attr="aria-label:timeline.railAria">
+                    <div class="tl-node" role="listitem">
+                        <img class="tl-icon" src="./assets/drawings/timeline_camera.png" alt="" aria-hidden="true" />
+                        <span class="tl-dot" aria-hidden="true"></span>
+                        <div class="tl-time">10:00</div>
+                        <div class="tl-label" data-i18n-html="timeline.node1">ĐÓN TIẾP<br>KHÁCH MỜI</div>
+                    </div>
+
+                    <div class="tl-node" role="listitem">
+                        <img class="tl-icon" src="./assets/drawings/timeline_rings.png" alt="" aria-hidden="true" />
+                        <span class="tl-dot" aria-hidden="true"></span>
+                        <div class="tl-time">10:30</div>
+                        <div class="tl-label" data-i18n-html="timeline.node2">BẮT ĐẦU<br>LỄ THÀNH HÔN</div>
+                    </div>
+
+                    <div class="tl-node" role="listitem">
+                        <img class="tl-icon" src="./assets/drawings/timeline_dinner_plate.svg" alt="" aria-hidden="true" />
+                        <span class="tl-dot" aria-hidden="true"></span>
+                        <div class="tl-time">11:00</div>
+                        <div class="tl-label" data-i18n-html="timeline.node3">CHUNG VUI<br>KHAI TIỆC</div>
+                    </div>
+
+                    <div class="tl-node" role="listitem">
+                        <img class="tl-icon" src="./assets/drawings/timeline_microphone.svg" alt="" aria-hidden="true" />
+                        <span class="tl-dot" aria-hidden="true"></span>
+                        <div class="tl-time">11:30</div>
+                        <div class="tl-label" data-i18n-html="timeline.node4">KARAOKE<br>VÀ KHIÊU VŨ</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location -->
+        <section id="location" class="section location-details-section" data-i18n-attr="aria-label:location.sectionAria">
+            <div class="location-card">
+                <div class="location-head" data-i18n="location.title">ĐỊA ĐIỂM</div>
+
+                <!-- Make venue i18n too (even if EN == VI) -->
+                <div class="location-venue" data-i18n="location.venue">BÚN RIÊU A-LIÊU</div>
+
+                <div class="location-rule" aria-hidden="true"></div>
+
+                <div class="location-map-wrap" data-i18n-attr="aria-label:location.mapAria">
+                    <iframe data-i18n-attr="title:location.iframeTitle"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7839.871932069664!2d106.8524230935791!3d10.739418700000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317523206fc7acf1%3A0x612efc6967b6211c!2zQsO6biByacOqdSBBLVTDiE8!5e0!3m2!1sen!2sau!4v1766456262201!5m2!1sen!2sau"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <div class="location-address">
+                    <div class="location-label" data-i18n="location.addressLabel">ĐỊA CHỈ</div>
+                    <div class="location-text" id="addressText">
+                        1551 Lý Thái Tổ, Long Tân, Nhơn Trạch, Đồng Nai, Vietnam
+                    </div>
+                </div>
+
+                <div class="location-actions" data-i18n-attr="aria-label:location.actionsAria">
+                    <button id="copyAddressBtn" class="location-link" type="button">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M5 15H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.8" />
+                        </svg>
+                        <span data-i18n="location.copyBtn">SAO CHÉP</span>
+                    </button>
+
+                    <a class="location-link"
+                       href="https://maps.app.goo.gl/Tvy69XUo4qLFTQpT6"
+                       target="_blank" rel="noreferrer">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 22s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M12 13.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" stroke="currentColor" stroke-width="1.8" />
+                        </svg>
+                        <span data-i18n="location.directionsBtn">CHỈ ĐƯỜNG</span>
+                    </a>
+
+                    <span id="copyAddressStatus" class="copy-status" aria-live="polite"></span>
+                </div>
+
+                <div class="location-rule location-rule-bottom" aria-hidden="true"></div>
+            </div>
+        </section>
+
+        <!-- RSVP -->
+        <section id="rsvp" class="rsvp-section" data-i18n-attr="aria-label:rsvp.sectionAria">
+            <div class="rsvp-inner">
+                <p class="rsvp-intro" data-i18n-html="rsvp.intro">
+                    Hãy xác nhận sự có mặt của bạn trước ngày 12.01.2026 để chúng mình chuẩn bị đón tiếp một cách chu đáo nhất.<br />
+                    Trân trọng!
+                </p>
+
+                <form id="rsvpForm" class="rsvp-form" autocomplete="off">
+                    <input id="rsvpName"
+                           name="name"
+                           class="rsvp-field"
+                           type="text"
+                           required
+                           data-i18n-attr="placeholder:rsvp.namePh;aria-label:rsvp.nameAria" />
+
+                    <textarea id="rsvpMessage"
+                              name="message"
+                              class="rsvp-field rsvp-textarea"
+                              rows="4"
+                              data-i18n-attr="placeholder:rsvp.messagePh;aria-label:rsvp.messageAria"></textarea>
+
+                    <select id="rsvpAttend" name="attending" class="rsvp-field rsvp-select" required
+                            data-i18n-attr="aria-label:rsvp.attendAria">
+                        <option value="" disabled selected data-i18n="rsvp.attendPlaceholder">Bạn sẽ đến chứ?</option>
+                        <option value="yes" data-i18n="rsvp.attendYes">Có, mình sẽ đến</option>
+                        <option value="no" data-i18n="rsvp.attendNo">Xin lỗi, mình không đến được</option>
+                    </select>
+
+                    <input id="rsvpGuests"
+                           name="guests"
+                           class="rsvp-field"
+                           type="text"
+                           data-i18n-attr="placeholder:rsvp.guestsPh;aria-label:rsvp.guestsAria" />
+
+                    <input id="rsvpInvitedBy"
+                           name="invitedBy"
+                           class="rsvp-field"
+                           type="text"
+                           data-i18n-attr="placeholder:rsvp.invitedByPh;aria-label:rsvp.invitedByAria" />
+
+                    <!-- Add an ID so your JS can disable it while sending -->
+                    <button id="rsvpSubmitBtn" type="submit" class="rsvp-submit" data-i18n-attr="aria-label:rsvp.submitAria">
+                        ➤
+                    </button>
+                </form>
+
+                <div id="rsvpStatus" class="rsvp-status" aria-live="polite"></div>
+            </div>
+        </section>
+
+        <footer class="footer" data-i18n-attr="aria-label:footer.sectionAria">
+            <div class="container">
+                <div class="script footer-script" data-i18n="footer.withLove">With love</div>
+                <div class="footer-names">Thúy Phương & Mitchell Lachlan</div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- <script src="./fireworks.js"></script> -->
+    <script src="./script.js"></script>
+</body>
+</html>

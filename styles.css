@@ -1,0 +1,4071 @@
+﻿/* ==========================================================================
+   Wedding Invitation — Red + Cream Theme + Invite Flip Overlay
+   ========================================================================== */
+
+/* -----------------------------
+   Design Tokens
+----------------------------- */
+:root {
+    /* Core palette */
+    --cream-0: #fbf3e8; /* main section background */
+    --cream-1: #f4e2d1; /* alt section background */
+    --ink: #231713;
+    --ink-muted: rgba(35,23,19,.70);
+    /* Wedding reds */
+    --accent: #9d122b; /* primary deep red */
+    --accent-2: #d64a63; /* rose highlight */
+    --accent-soft: rgba(157,18,43,.14);
+    /* Global UI tokens */
+    --bg: #fff7ef;
+    --text: rgba(35,23,19,.92);
+    --muted: rgba(35,23,19,.70);
+    --border: rgba(35,23,19,.14);
+    --card: rgba(35,23,19,.04);
+    --shadow: 0 18px 50px rgba(35,23,19,.14);
+    --radius: 20px;
+    /* Paper texture tuning */
+    --paper-grain: 0.024;
+    --paper-fiber: 0.022;
+    /* Layout */
+    --container: 1000px;
+    --topbar-h: 56px;
+    /* Typography */
+    --font-sans: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    --font-script: "Great Vibes",cursive;
+    --font-name: "Playwrite VN",cursive;
+    /* Motion */
+    --ease: cubic-bezier(.2,.8,.2,1);
+    --fast: 120ms;
+    --med: 240ms;
+}
+
+/* -----------------------------
+   Base / Reset
+----------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+
+button {
+    font: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid rgba(157,18,43,.55);
+    outline-offset: 3px;
+}
+
+/* Reduced motion global */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* =========================
+   Lock site until invite accepted
+   ========================= */
+body.locked {
+    overflow: hidden;
+}
+
+    /* Hide EVERYTHING except the overlay */
+    body.locked > :not(#enterOverlay) {
+        display: none !important;
+    }
+
+/* Optional: nice reveal animation when unlocked */
+@keyframes siteReveal {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body.reveal .topbar,
+body.reveal main,
+body.reveal footer {
+    animation: siteReveal 520ms var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.reveal .topbar,
+    body.reveal main,
+    body.reveal footer {
+        animation: none !important;
+    }
+}
+
+/* -----------------------------
+   Helpers / Utilities
+----------------------------- */
+.container {
+    width: min(var(--container), calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+.script {
+    font-family: var(--font-script);
+    letter-spacing: 0.5px;
+}
+
+.amp {
+    font-family: var(--font-script);
+    font-weight: 400;
+}
+
+/* Optional inline code styling (if you use <code> anywhere) */
+code {
+    background: rgba(255,255,255,0.10);
+    padding: 0.1rem 0.35rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+/* Screen-reader only utility (used by #overlayStatus) */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* -----------------------------
+   Buttons
+----------------------------- */
+.btn {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.06);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform var(--fast) var(--ease), background var(--fast) var(--ease), filter var(--fast) var(--ease);
+    user-select: none;
+}
+
+    .btn:hover {
+        transform: translateY(-1px);
+        background: rgba(255,255,255,.10);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+.btn-small {
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    border-color: rgba(255,255,255,.55);
+    color: #fff;
+}
+
+    .btn-primary:hover {
+        filter: brightness(1.03);
+    }
+
+.btn-ghost {
+    background: transparent;
+    border-color: rgba(255,255,255,.35);
+}
+
+/* -----------------------------
+   Topbar (Solid Cream)
+----------------------------- */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(251,243,232,.98);
+    border-bottom: 1px solid rgba(35,23,19,.14);
+    backdrop-filter: none;
+    --text: rgba(35,23,19,.92);
+    --muted: rgba(35,23,19,.70);
+    --border: rgba(35,23,19,.14);
+    box-shadow: 0 10px 26px rgba(35,23,19,.10);
+}
+
+    .topbar::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .10;
+        background: radial-gradient(900px 240px at 50% 0%, rgba(255,255,255,.65), rgba(255,255,255,0) 65%), repeating-linear-gradient(115deg, rgba(35,23,19,.018) 0px, rgba(35,23,19,.018) 1px, transparent 11px, transparent 24px), repeating-linear-gradient(0deg, rgba(35,23,19,.016) 0px, rgba(35,23,19,.016) 1px, transparent 4px, transparent 9px);
+    }
+
+.topbar-inner {
+    height: var(--topbar-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    width: min(calc(var(--container) + 100px), calc(100% - 24px));
+    margin: 0 auto;
+}
+
+.topbar-title {
+    color: var(--text);
+    opacity: .98;
+}
+
+.topbar-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    .topbar-actions .btn {
+        background: rgba(255,255,255,.55);
+        border-color: rgba(35,23,19,.14);
+        color: var(--text);
+    }
+
+        .topbar-actions .btn:hover {
+            background: rgba(255,255,255,.72);
+        }
+
+/* -----------------------------
+   Hero (Full-bleed photo)
+----------------------------- */
+.hero {
+    /* Change this ONE value to swap the hero photo */
+    --hero-photo: url("./assets/photos/01.jpg");
+    position: relative;
+    min-height: 100vh;
+    padding-top: var(--topbar-h);
+    overflow: hidden;
+    display: grid;
+    align-items: end;
+}
+
+/* Full-bleed image */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--hero-photo);
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.01);
+    filter: saturate(1.03) contrast(1.03);
+}
+
+    /* Cinematic scrim so text reads */
+    .hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(1000px 520px at 50% 18%, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 52%), linear-gradient(to top, rgba(0,0,0,.80) 0%, rgba(0,0,0,.34) 38%, rgba(0,0,0,0) 70%);
+    }
+
+/* Keep canvas but hidden by default */
+#fireworksCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.hero.has-fireworks #fireworksCanvas {
+    opacity: 1;
+}
+
+/* Bottom caption */
+.hero-content {
+    position: relative;
+    z-index: 3;
+    width: min(900px, calc(100% - 44px));
+    margin: 0 auto;
+    text-align: center;
+    padding: 64px 0 56px;
+    color: rgba(255,255,255,.96);
+    text-shadow: 0 18px 44px rgba(0,0,0,.40);
+}
+
+/* ===== Reveal animation (staggered) ===== */
+@keyframes heroFadeUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        filter: blur(1px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+/* Start hidden so the animation actually “reveals” */
+.hero-content .hero-script,
+.hero-content .hero-title,
+.hero-content .hero-date {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    will-change: opacity, transform, filter;
+}
+
+/* Stagger timings */
+.hero-content .hero-script {
+    animation: heroFadeUp 720ms var(--ease) both;
+    animation-delay: 280ms;
+}
+
+.hero-content .hero-title {
+    animation: heroFadeUp 720ms var(--ease) both;
+    animation-delay: 460ms;
+}
+
+.hero-content .hero-date {
+    animation: heroFadeUp 720ms var(--ease) both;
+    animation-delay: 640ms;
+}
+
+/* Script line stays script */
+.hero-script {
+    font-size: clamp(34px, 4.6vw, 58px);
+    opacity: .96;
+    letter-spacing: .2px;
+    line-height: 1.05;
+}
+
+/* Names + date share the same “date style” */
+.hero-title,
+.hero-date {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.90);
+}
+
+.hero-title {
+    margin: 14px 0 8px;
+    font-size: 14px;
+    line-height: 1.35;
+    white-space: normal;
+}
+
+.hero-date {
+    font-size: 14px;
+    opacity: .95;
+}
+
+/* IMPORTANT: stop global .amp from changing the & font */
+.hero-title .amp {
+    font-family: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    opacity: .92;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .hero-content .hero-script,
+    .hero-content .hero-title,
+    .hero-content .hero-date {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+    }
+}
+
+@media (max-width:760px) {
+    .hero-content {
+        padding: 56px 0 44px;
+    }
+
+    .hero-script {
+        font-size: clamp(30px, 8vw, 46px);
+    }
+}
+
+/* -----------------------------
+   Sections (Cream theme + paper texture)
+----------------------------- */
+.section {
+    position: relative;
+    background: var(--cream-0);
+    color: var(--ink);
+    padding: 64px 0;
+    --text: var(--ink);
+    --muted: var(--ink-muted);
+    --border: rgba(35,23,19,.14);
+    --card: rgba(35,23,19,.04);
+    --shadow: 0 16px 40px rgba(35,23,19,.14);
+    overflow: hidden;
+}
+
+    .section.alt {
+        background: var(--cream-1);
+        border-top: 1px solid rgba(35,23,19,.14);
+        border-bottom: 1px solid rgba(35,23,19,.14);
+        --card: rgba(35,23,19,.05);
+    }
+
+    .section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: radial-gradient(1200px 700px at 50% 18%, rgba(255,255,255,.60) 0%, rgba(255,255,255,.18) 48%, rgba(0,0,0,.045) 100%), repeating-linear-gradient(115deg, rgba(35,23,19,var(--paper-fiber)) 0px, rgba(35,23,19,var(--paper-fiber)) 1px, rgba(255,255,255,0) 11px, rgba(255,255,255,0) 24px), repeating-linear-gradient(0deg, rgba(35,23,19,var(--paper-grain)) 0px, rgba(35,23,19,var(--paper-grain)) 1px, rgba(255,255,255,0) 4px, rgba(255,255,255,0) 9px);
+        opacity: .22;
+        mix-blend-mode: multiply;
+    }
+
+    .section.alt::before {
+        opacity: .18;
+    }
+
+    .section > .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .section .btn {
+        background: rgba(255,255,255,.38);
+        border-color: rgba(157,18,43,.14);
+        color: var(--ink);
+    }
+
+        .section .btn:hover {
+            background: rgba(255,255,255,.55);
+        }
+
+.section-title {
+    font-size: 28px;
+    margin: 0 0 18px;
+    letter-spacing: .2px;
+    color: var(--ink);
+}
+
+    .section-title::after {
+        content: "";
+        display: block;
+        width: 64px;
+        height: 3px;
+        margin-top: 10px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), rgba(157,18,43,0));
+        opacity: .9;
+    }
+
+/* Soft card common */
+.card,
+.timeline-card,
+.address {
+    background: rgba(255,255,255,.35);
+    border: 1px solid rgba(157,18,43,.10);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(1px);
+}
+
+.card {
+    padding: 18px;
+}
+
+.card h3 {
+    margin: 0 0 8px;
+}
+
+.card p {
+    margin: 8px 0;
+    color: var(--muted);
+}
+
+.card {
+    padding: 18px;
+}
+
+    .card h3 {
+        margin: 0 0 8px;
+    }
+
+    .card p {
+        margin: 8px 0;
+        color: var(--muted);
+    }
+
+/* -----------------------------
+   Date Banner (clean white + red text + stacked monogram + reveal)
+----------------------------- */
+.date-banner {
+    background: #ffffff !important;
+    padding: 78px 0 62px;
+    text-align: center;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    /* ✅ IMPORTANT: allow the envelope to extend outside without being clipped */
+    overflow: visible !important;
+}
+
+    /* Disable the paper texture pseudo-element on .section for this area */
+    .date-banner.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+    /* Remove the alt section borders too */
+    .date-banner.section.alt {
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+    }
+
+/* Centered column WITHOUT a card/container look */
+.date-inner {
+    width: min(560px, calc(100% - 44px));
+    margin: 0 auto;
+    position: relative;
+}
+
+/* ===== Monogram: P (Times) + L (script) overlapped ===== */
+.date-monogram {
+    position: relative;
+    height: 92px;
+    margin: 0 auto 18px;
+    width: 140px;
+    /* Tuning knobs */
+    --mono-size-a: 80px; /* P size */
+    --mono-size-b: 64px; /* L size */
+    --mono-nudge-ax: -6px; /* P: +right / -left */
+    --mono-nudge-ay: 6px; /* P: +down / -up */
+    --mono-nudge-bx: 0px; /* L: +right / -left */
+    --mono-nudge-by: 25px; /* L: +down / -up */
+}
+
+    .date-monogram .mono-a,
+    .date-monogram .mono-b {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        line-height: 1;
+        color: var(--accent);
+        opacity: 0.92;
+    }
+
+    /* First letter: Times New Roman */
+    .date-monogram .mono-a {
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 500;
+        font-size: var(--mono-size-a);
+        transform: translate(-50%, -50%) translate(var(--mono-nudge-ax), var(--mono-nudge-ay));
+        letter-spacing: 0.02em;
+    }
+
+    /* Second letter: script */
+    .date-monogram .mono-b {
+        font-family: var(--font-script);
+        font-weight: 20;
+        font-size: var(--mono-size-b);
+        transform: translate(-50%, -50%) translate(var(--mono-nudge-bx), var(--mono-nudge-by));
+    }
+
+/* ===== Lead text ===== */
+.date-lead {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    line-height: 1.55;
+    margin: 0 0 16px;
+    color: var(--accent);
+    opacity: 0.88;
+}
+
+/* ===== Timer ===== */
+.date-timer {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: .18em;
+    color: var(--accent);
+    opacity: 0.92;
+    padding: 8px 10px;
+    border-radius: 16px;
+}
+
+    .date-timer .t {
+        min-width: 2ch;
+        font-variant-numeric: lining-nums tabular-nums;
+    }
+
+    .date-timer .sep {
+        opacity: .60;
+    }
+
+/* ===== Your flower drawing ===== */
+.date-floral {
+    position: absolute;
+    inset: 0;
+    opacity: 0.90;
+    z-index: 2;
+    pointer-events: none;
+    -webkit-clip-path: none;
+    clip-path: none;
+}
+
+    .date-floral img {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: min(520px, 88%);
+        height: auto;
+        transform: translate(-50%, -18%);
+    }
+
+/* ===== Optional collage (single envelope PNG) ===== */
+.date-collage {
+    position: relative;
+    margin-top: 10px;
+    width: min(720px, 100%);
+    margin-left: auto;
+    margin-right: auto;
+    /* Tuning knobs */
+    --env-nudge-y: 26px; /* ? lift toward the flower */
+    --env-scale: 1.18;
+    --env-max-h: 1200px;
+    /* ? Set this to your real envelope ratio (width / height). Example: 1600/900 */
+    --env-ar: 1;
+    transform: translateY(var(--env-nudge-y)) scale(var(--env-scale));
+    transform-origin: center top;
+    /* ? extra safety (some browsers still clip transformed children oddly) */
+    overflow: visible;
+    z-index: 1;
+}
+
+/* Stable stage so overlays don’t jump before image loads */
+.env-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--env-ar);
+    max-height: var(--env-max-h);
+    overflow: visible; /* ✅ don't clip polaroids or envelope */
+
+    /* Bottom points (legs of the V) */
+    --crease-y: 60%;
+    --crease-left-x: 44.5%;
+    --crease-right-x: 55.5%;
+
+    /* Top points (higher endpoints) */
+    --crease-top-y: 40%;
+    --crease-top-left-x: 23%;
+    --crease-top-right-x: 77.5%;
+
+    --v-clip: polygon(
+        0% 0%,
+        100% 0%,
+        var(--crease-top-right-x) var(--crease-top-y),
+        var(--crease-right-x) var(--crease-y),
+        var(--crease-left-x) var(--crease-y),
+        var(--crease-top-left-x) var(--crease-top-y)
+    );
+}
+
+.debug-crease {
+    display: none;
+    position: absolute;
+    inset: 0; /* top/right/bottom/left:0 */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50; /* higher than photos if you want to see it */
+}
+
+.debug-crease line {
+    stroke: rgba(255,0,0,.8);
+    stroke-width: 0.6;
+    vector-effect: non-scaling-stroke;
+}
+
+/* Envelope fills the stage */
+
+/* ===== Polaroids overlay ===== */
+.date-polaroids {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    --polaroid-border: rgba(35,23,19,.14);
+    --polaroid-shadow: 0 18px 46px rgba(0,0,0,.14);
+    --polaroid-pad: 12px;
+    --polaroid-bottom: 44px;
+    /* Default placement + size (ratios of the stage) */
+    --p1-w: 0.24;
+    --p1-x: 0.30;
+    --p1-y: 0.52;
+    --p1-rot: -10deg;
+    --p2-w: 0.24;
+    --p2-x: 0.50;
+    --p2-y: 0.42;
+    --p2-rot: 4deg;
+    --p3-w: 0.24;
+    --p3-x: 0.70;
+    --p3-y: 0.52;
+    --p3-rot: 12deg;
+    /* ✅ Clip using SAME 4 points as the red SVG (top L/R and bottom L/R) */
+    -webkit-clip-path: none;
+    clip-path: none;
+}
+
+/* Shared polaroid styling */
+.date-polaroid {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    background: rgba(255,255,255,.98);
+    border: 1px solid var(--polaroid-border, rgba(35,23,19,.14));
+    border-radius: 0;
+    box-shadow: var(--polaroid-shadow, 0 18px 46px rgba(0,0,0,.14));
+    overflow: hidden;
+    padding: var(--polaroid-pad, 12px);
+    padding-bottom: var(--polaroid-bottom, 44px);
+    transform-origin: 50% 50%;
+    /* ✅ hard safety so nothing can explode */
+    min-width: 120px;
+    max-width: 240px;
+}
+
+    .date-polaroid img {
+        width: 100%;
+        display: block;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+    }
+
+    /* Placement + z-index order (rightmost = highest z) */
+    .date-polaroid.p1 {
+        width: calc(var(--p1-w, 0.24) * 100%);
+        left: calc(var(--p1-x, 0.36) * 100%);
+        top: calc(var(--p1-y, 0.58) * 100%);
+        transform: translate(-50%, -50%) rotate(var(--p1-rot, -10deg));
+        z-index: 2;
+    }
+
+    .date-polaroid.p2 {
+        width: calc(var(--p2-w, 0.24) * 100%);
+        left: calc(var(--p2-x, 0.50) * 100%);
+        top: calc(var(--p2-y, 0.52) * 100%);
+        transform: translate(-50%, -50%) rotate(var(--p2-rot, 4deg));
+        z-index: 3;
+    }
+
+    .date-polaroid.p3 {
+        width: calc(var(--p3-w, 0.24) * 100%);
+        left: calc(var(--p3-x, 0.64) * 100%);
+        top: calc(var(--p3-y, 0.58) * 100%);
+        transform: translate(-50%, -50%) rotate(var(--p3-rot, 12deg));
+        z-index: 4;
+    }
+
+/* ===== Scroll reveal (first time only via JS) ===== */
+@keyframes dateFadeUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        filter: blur(1px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    will-change: opacity, transform, filter;
+}
+
+.date-banner.is-visible .date-lead {
+    animation: dateFadeUp 700ms var(--ease) both;
+    animation-delay: 140ms;
+}
+
+.date-banner.is-visible .date-timer {
+    animation: dateFadeUp 700ms var(--ease) both;
+    animation-delay: 320ms;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .date-banner {
+        padding: 72px 0 54px;
+    }
+
+    .date-monogram {
+        height: 86px;
+        width: 132px;
+        --mono-size-a: 60px;
+        --mono-size-b: 76px;
+    }
+
+    .date-lead {
+        font-size: 14px;
+        letter-spacing: .12em;
+    }
+
+    .date-timer {
+        font-size: 24px;
+        letter-spacing: .16em;
+    }
+}
+
+/* -----------------------------
+   Save The Date (hero-style, full-bleed, identical to hero)
+----------------------------- */
+.save-date-hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: var(--topbar-h);
+    overflow: hidden;
+    display: grid;
+    align-items: end;
+    background: #000;
+    isolation: isolate;
+    --sd-photo: url("./assets/photos/01.jpg");
+    --sd-photo-pos: center;
+}
+
+.save-date-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--sd-photo);
+    background-size: cover;
+    background-position: var(--sd-photo-pos);
+    transform: scale(1.01);
+    filter: saturate(1.03) contrast(1.03);
+}
+
+    .save-date-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(1000px 520px at 50% 18%, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 52%), linear-gradient(to top, rgba(0,0,0,.80) 0%, rgba(0,0,0,.34) 38%, rgba(0,0,0,0) 70%);
+    }
+
+.save-date-title {
+    position: absolute;
+    left: clamp(18px, 4vw, 54px);
+    bottom: clamp(18px, 4vw, 54px);
+    z-index: 3;
+    text-align: left;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+    color: rgba(255,255,255,.96);
+    text-shadow: 0 18px 44px rgba(0,0,0,.40);
+}
+
+.sd-word {
+    line-height: 1;
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    filter: blur(1px);
+    will-change: opacity, transform, filter;
+}
+
+.sd-save,
+.sd-date {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    font-size: clamp(44px, 6vw, 72px);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.sd-the {
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(34px, 4.6vw, 56px);
+    margin-top: -10px;
+    margin-bottom: -6px;
+}
+
+@keyframes sdWordIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        filter: blur(1px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+/* Stagger: SAVE -> the -> DATE */
+.save-date-hero-section.is-visible .sd-save {
+    animation: sdWordIn 760ms var(--ease) both;
+    animation-delay: 260ms;
+}
+
+.save-date-hero-section.is-visible .sd-the {
+    animation: sdWordIn 760ms var(--ease) both;
+    animation-delay: 460ms;
+}
+
+.save-date-hero-section.is-visible .sd-date {
+    animation: sdWordIn 760ms var(--ease) both;
+    animation-delay: 660ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sd-word {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+    }
+}
+
+/* =========================
+   Childhood / Kids Photos
+   ========================= */
+
+.childhood-section {
+    width: 100%;
+    padding: clamp(56px, 7vw, 96px) 18px;
+    background: #fff;
+}
+
+
+.childhood-inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+}
+
+.childhood-header {
+    text-align: center;
+    margin-bottom: clamp(18px, 3vw, 28px);
+}
+
+.childhood-title {
+    margin: 0;
+    font-family: "Playwrite VN", "Great Vibes", cursive;
+    font-weight: 400;
+    font-size: clamp(34px, 5vw, 56px);
+    line-height: 1.05;
+}
+
+.childhood-subtitle {
+    margin: 10px 0 0;
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-weight: 400;
+    font-size: clamp(14px, 1.6vw, 16px);
+    opacity: 0.72;
+}
+
+/* The “stage” matches the SVG’s aspect ratio so overlays line up predictably.
+   If your SVG is a different size ratio, change this. */
+.childhood-stage {
+    position: relative;
+    width: min(980px, 100%);
+    margin: 0 auto;
+    /* This should match your SVG’s width/height ratio.
+     Common exports are wide; adjust if needed. */
+    aspect-ratio: 1792 / 1024;
+    /* A little breathing room so nothing clips on small screens */
+    overflow: visible;
+    /* Frame tuning vars (desktop) */
+    --left-x: 26%;
+    --left-y: 28%;
+    --left-w: 15%;
+    --left-h: 25%;
+    --left-rot: 2deg;
+    --right-x: 60.5%;
+    --right-y: 30%;
+    --right-w: 15%;
+    --right-h: 25%;
+    --right-rot: -5deg;
+}
+
+/* SVG overlay on top */
+.childhood-outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 3;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Photos behind the SVG */
+.childhood-photo {
+    position: absolute;
+    z-index: 3;
+    object-fit: cover;
+    /* Subtle “print” look */
+    border-radius: 6px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.10), 0 6px 14px rgba(0,0,0,0.08);
+    /* Helps keep edges clean behind line art */
+    outline: 2px solid rgba(255,255,255,0.55);
+    outline-offset: 0;
+}
+
+/* -------------------------------------------------------
+   FRAME POSITIONING (Tweak these 8 values if needed)
+   These numbers place the photos inside the “blank” frames
+   in your SVG. Adjust until perfect.
+   ------------------------------------------------------- */
+
+/* Left frame photo */
+.childhood-photo--left {
+    left: var(--left-x);
+    top: var(--left-y);
+    width: var(--left-w);
+    height: var(--left-h);
+    transform: rotate(var(--left-rot));
+}
+
+/* Right frame photo */
+.childhood-photo--right {
+    left: var(--right-x);
+    top: var(--right-y);
+    width: var(--right-w);
+    height: var(--right-h);
+    transform: rotate(var(--right-rot));
+}
+
+/* Responsive tweak for narrow phones */
+@media (max-width: 520px) {
+    .childhood-section {
+        padding: 48px 14px;
+    }
+
+    /* If the SVG compresses oddly on very small widths,
+     you can slightly change placement here. */
+    .childhood-stage {
+        --left-x: 18.5%;
+        --left-y: 16.5%;
+        --left-w: 26%;
+        --left-h: 31.5%;
+        --left-rot: -1deg;
+        --right-x: 58%;
+        --right-y: 15.5%;
+        --right-w: 24%;
+        --right-h: 32%;
+        --right-rot: -5deg;
+    }
+}
+
+/* -----------------------------
+   Family Details (invitation-style like reference)
+----------------------------- */
+.family-details-section {
+    background: #ffffff !important;
+    padding: 88px 0 96px;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+}
+
+    /* Disable paper texture on this section */
+    .family-details-section.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+.family-card {
+    width: min(720px, calc(100% - 44px));
+    margin: 0 auto;
+    text-align: center;
+    color: rgba(35,23,19,.86);
+}
+
+/* Top family columns */
+.family-top {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 28px;
+    align-items: start;
+    justify-items: center;
+    margin-top: 6px;
+}
+
+.family-divider {
+    width: 1px;
+    height: 92px;
+    justify-self: center;
+    background: linear-gradient( to bottom, rgba(35,23,19,0), rgba(35,23,19,.30) 18%, rgba(35,23,19,.30) 82%, rgba(35,23,19,0) );
+}
+
+.family-col {
+    text-align: center;
+}
+
+.family-head {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(35,23,19,.72);
+    margin-bottom: 10px;
+}
+
+.family-body {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.85;
+    letter-spacing: .01em;
+    color: rgba(35,23,19,.62);
+}
+
+/* Invite sentence */
+.family-invite {
+    margin-top: 22px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(35,23,19,.64);
+}
+
+/* Couple names */
+.family-couple {
+    margin-top: 28px;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+}
+
+.family-name {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: clamp(28px, 4.4vw, 44px);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    line-height: 1.12;
+}
+
+.family-and {
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(22px, 3.6vw, 36px);
+    color: rgba(35,23,19,.55);
+    line-height: 1;
+    margin-top: -10px;
+    margin-bottom: -10px;
+}
+
+/* Time / date block with thin rules */
+.family-when {
+    margin-top: 24px;
+}
+
+.family-when-label {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: .02em;
+    color: rgba(35,23,19,.60);
+}
+
+.family-when-address {
+    margin-top: 10px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: .02em;
+    color: rgba(35,23,19,.62);
+}
+
+.family-rule {
+    width: min(520px, 86%);
+    height: 1px;
+    background: rgba(35,23,19,.22);
+    margin: 14px auto;
+}
+
+.family-when-main {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.family-date {
+    margin-top: 8px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: .12em;
+    color: var(--accent);
+}
+
+/* Directions */
+.family-directions {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(35,23,19,.58);
+    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+    .family-directions svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .family-directions:hover {
+        opacity: .9;
+        transform: translateY(-1px);
+    }
+
+    .family-directions:active {
+        transform: translateY(0);
+    }
+
+@media (max-width: 520px) {
+    .family-details-section {
+        padding: 76px 0 86px;
+    }
+
+    .family-top {
+        gap: 18px;
+    }
+
+    .family-divider {
+        height: 86px;
+    }
+
+    .family-name {
+        letter-spacing: .10em;
+    }
+}
+
+/* Only stack on very tiny widths */
+@media (max-width: 360px) {
+    .family-top {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .family-divider {
+        display: none;
+    }
+}
+
+/* Right Side Embossed Flower */
+.family-details-section {
+    position: relative; /* anchor the absolute flower */
+    overflow: hidden; /* keep it clipped to the section */
+}
+
+/* keep the card above the flower */
+.family-card {
+    position: relative;
+    z-index: 3;
+}
+
+.family-emboss {
+    position: absolute;
+    right: clamp(-40px, -4vw, -10px); /* slight bleed off the edge */
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(160px, 18vw, 320px); /* scale responsively */
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+    /* “embossed” feel tuning knobs */
+    opacity: 0.35;
+    mix-blend-mode: multiply; /* try: multiply / soft-light */
+    filter: contrast(1.05) saturate(0.9);
+}
+
+    .family-emboss img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+/* Mobile: either shrink or hide */
+@media (max-width: 720px) {
+    .family-emboss {
+        width: clamp(120px, 28vw, 220px);
+        opacity: 0.18;
+        right: -30px;
+    }
+}
+
+@media (max-width: 420px) {
+    .family-emboss {
+        display: none; /* optional: remove entirely on tiny screens */
+    }
+}
+
+
+/* -----------------------------
+   The Story of Love (invitation-style + multi-year timeline + film reel)
+----------------------------- */
+.story-of-love-section {
+    background: #ffffff !important;
+    padding: 88px 0 96px;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    overflow: hidden;
+    position: relative;
+    /* ===== TEAR TUNING KNOBS ===== */
+    --tear-bleed: 18px; /* how much the torn paper overlaps UP into the previous section */
+    --tear-h: clamp(26px, 4.6vw, 56px); /* height of the torn strip itself */
+    --tear-paper: #ffffff; /* paper color */
+    --tear-shadow: rgba(0,0,0,.20); /* shadow strength */
+    --tear-edge: rgba(0,0,0,.20); /* edge definition line strength */
+    /* Jagged tear mask (small “paper rip”, not a big wave) */
+    --tear-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%201600%2090%27%3E%3Cpath%20d%3D%27M0%200H1600V58%20L1600%2062%20L1560%2061%20L1520%2060%20L1480%2061%20L1440%2062%20L1400%2061%20L1360%2063%20L1320%2060%20L1280%2063%20L1240%2061%20L1200%2062%20L1160%2061%20L1120%2063%20L1080%2060%20L1040%2063%20L1000%2060%20L960%2061%20L920%2060%20L880%2062%20L840%2064%20L800%2062%20L760%2060%20L720%2061%20L680%2063%20L640%2060%20L600%2062%20L560%2060%20L520%2063%20L480%2060%20L440%2062%20L400%2061%20L360%2060%20L320%2062%20L280%2060%20L240%2060%20L200%2062%20L160%2061%20L120%2064%20L80%2062%20L40%2061%20L0%2061%20L0%2058%20Z%27%2F%3E%3C%2Fsvg%3E");
+}
+
+/* The torn paper piece (corner-to-corner, sits on top edge) */
+.section.story-of-love-section::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-1 * var(--tear-bleed));
+    height: calc(var(--tear-h) + var(--tear-bleed));
+    pointer-events: none;
+    z-index: 3;
+    /* subtle paper tone so it reads as “paper”, not a flat bar */
+    background: linear-gradient(to bottom, rgba(0,0,0,.035) 0%, rgba(0,0,0,0) 68%), var(--tear-paper);
+    /* Shadow falls DOWN onto the Story section */
+    filter: drop-shadow(0 12px 10px var(--tear-shadow));
+    -webkit-mask-image: var(--tear-mask);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-image: var(--tear-mask);
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+}
+
+/* Edge definition that follows the SAME tear shape (this is what you were missing) */
+.section.story-of-love-section::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(-1 * var(--tear-bleed));
+    height: calc(var(--tear-h) + var(--tear-bleed));
+    pointer-events: none;
+    z-index: 3;
+    /* thin “fiber/edge” shading concentrated near the torn boundary */
+    background: linear-gradient( to bottom, rgba(0,0,0,0) 62%, var(--tear-edge) 74%, rgba(0,0,0,0) 92% );
+    opacity: .65;
+    -webkit-mask-image: var(--tear-mask);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-image: var(--tear-mask);
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+}
+
+/* Keep content above the tear */
+.story-love-card {
+    position: relative;
+    z-index: 4;
+}
+
+.story-flower {
+    position: absolute;
+    left: var(--story-flower-left, 0px);
+    top: var(--story-flower-top, 140px);
+    width: var(--story-flower-width, 324px);
+    height: var(--story-flower-height, 480px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.story-flower img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@media (max-width: 1400px) {
+    .story-flower {
+        display: none;
+    }
+}
+
+.story-love-card {
+    width: min(760px, calc(100% - 44px));
+    margin: 0 auto;
+    text-align: center;
+    color: rgba(35,23,19,.86);
+}
+
+/* Title: THE STORY of LOVE */
+.story-love-title {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 10px;
+    justify-content: center;
+}
+
+    .story-love-title .t-a,
+    .story-love-title .t-b {
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 600;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        font-size: clamp(18px, 3vw, 28px);
+        color: rgba(35,23,19,.70);
+    }
+
+    .story-love-title .t-of {
+        font-family: var(--font-script);
+        font-weight: 400;
+        font-size: clamp(22px, 3.4vw, 34px);
+        color: rgba(35,23,19,.55);
+        letter-spacing: 0;
+        text-transform: none;
+        transform: translateY(2px);
+    }
+
+/* Intro wrapper */
+.story-intro {
+    margin-top: 34px;
+    display: grid;
+    place-items: center;
+}
+
+/* =========================================================
+   Collage (Dynamic XY positioning controls)
+   Edit ONLY the variables in .story-polaroid-collage
+   - X/Y values are UNIT-LESS ratios (scale with the stage)
+   - Example: 0.02 = 2% of stage size
+   ========================================================= */
+.story-polaroid-collage {
+    width: min(760px, 100%);
+    position: relative;
+    margin: 0 auto;
+    /* ----- STAGE SIZE (scales proportionally) ----- */
+    --stage-w: min(760px, calc(100vw - 44px));
+    --stage-aspect: 1.13; /* height = width * aspect */
+    --stage-h: clamp(520px, calc(var(--stage-w) * var(--stage-aspect)), 860px);
+    /* ----- SIZES (scale with stage width) ----- */
+    --photo-w: clamp(240px, calc(var(--stage-w) * 0.52), 390px);
+    --text-w: clamp(210px, calc(var(--stage-w) * 0.42), 360px);
+    /* ----- MANUAL POSITIONS (EDIT THESE) ----- */
+    /* Use ratios:
+       X is relative to stage width  (0.01 = 1% of stage width)
+       Y is relative to stage height (0.01 = 1% of stage height)
+    */
+    /* Top-left photo (bride photo) */
+    --p1-x: 0.013; /* ~10px at 760px wide */
+    --p1-y: 0.000;
+    --p1-rot: -6deg;
+    /* Bottom-right photo (groom photo) */
+    --p2-x: 0.026; /* ~20px at 760px wide */
+    --p2-y: 0.030; /* ~20px when stage-h ~680px */
+    --p2-rot: 6deg;
+    /* Top-right text (bride text) */
+    --t1-x: 0.000;
+    --t1-y: 0.140;
+    /* Bottom-left text (groom text) */
+    --t2-x: 0.000;
+    --t2-y: -0.140;
+    /* ----- DEPTH CONTROL ----- */
+    --z-text: 2;
+    --z-photo: 4;
+    /* ----- DERIVED (DON'T EDIT) ----- */
+    --p1-tx: calc(var(--stage-w) * var(--p1-x));
+    --p1-ty: calc(var(--stage-h) * var(--p1-y));
+    --p2-tx: calc(var(--stage-w) * var(--p2-x));
+    --p2-ty: calc(var(--stage-h) * var(--p2-y));
+    --t1-tx: calc(var(--stage-w) * var(--t1-x));
+    --t1-ty: calc(var(--stage-h) * var(--t1-y));
+    --t2-tx: calc(var(--stage-w) * var(--t2-x));
+    --t2-ty: calc(var(--stage-h) * var(--t2-y));
+    height: var(--stage-h);
+}
+
+/* ---- Polaroid frames: SQUARE corners ---- */
+.story-of-love-section .polaroid {
+    background: rgba(255,255,255,.98);
+    border: 1px solid rgba(35,23,19,.14);
+    border-radius: 0 !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.14);
+    overflow: hidden;
+}
+
+.story-of-love-section .polaroid-photo {
+    width: var(--photo-w);
+    padding: 14px 14px 40px;
+    border-radius: 0 !important;
+}
+
+    .story-of-love-section .polaroid-photo img {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        display: block;
+        border-radius: 0 !important;
+        filter: contrast(1.02) saturate(1.02);
+    }
+
+/* TOP-LEFT PHOTO (dynamic XY) */
+.polaroid-bride-photo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--photo-w);
+    transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
+    transform-origin: 50% 50%;
+    z-index: var(--z-photo);
+}
+
+/* BOTTOM-RIGHT PHOTO (dynamic XY) */
+.polaroid-groom-photo {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--photo-w);
+    transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
+    transform-origin: 50% 50%;
+    z-index: var(--z-photo);
+}
+
+/* ---- Text: NO CONTAINER AT ALL ---- */
+.story-info {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    width: var(--text-w);
+    max-width: 360px;
+    text-align: center;
+    z-index: var(--z-text);
+}
+
+/* Typography */
+.story-info-role {
+    font-size: clamp(28px, 4vw, 44px);
+    color: rgba(35,23,19,.48);
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.story-info-name {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: clamp(18px, 2.8vw, 28px);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(35,23,19,.70);
+    line-height: 1.12;
+}
+
+.story-info-name span {
+    display: block;
+}
+
+.story-info-date {
+    margin-top: 10px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: .10em;
+    color: rgba(35,23,19,.55);
+}
+
+/* TOP-RIGHT TEXT (dynamic XY) */
+.story-info-bride {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: var(--text-w);
+    transform: translate3d(var(--t1-tx), var(--t1-ty), 0);
+    z-index: var(--z-text);
+}
+
+/* BOTTOM-LEFT TEXT (dynamic XY) */
+.story-info-groom {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: var(--text-w);
+    transform: translate3d(var(--t2-tx), var(--t2-ty), 0);
+    z-index: var(--z-text);
+}
+
+/* Mobile: KEEP the angled collage (no stacking) */
+@media (max-width: 720px) {
+    .story-polaroid-collage {
+        /* keep absolute overlap layout */
+        width: min(760px, 100%);
+        position: relative;
+        /* Make the stage a bit shorter + tighter on phones */
+        --stage-w: min(640px, calc(100vw - 24px));
+        --stage-aspect: 1.08;
+        --stage-h: clamp(420px, calc(var(--stage-w) * var(--stage-aspect)), 640px);
+        /* Scale elements down */
+        --photo-w: clamp(190px, calc(var(--stage-w) * 0.52), 290px);
+        --text-w: clamp(160px, calc(var(--stage-w) * 0.40), 260px);
+        /* Re-tune positions slightly so nothing feels “off-screen” */
+        --p1-x: 0.010;
+        --p1-y: 0.000;
+        --p1-rot: -6deg;
+        --p2-x: 0.012;
+        --p2-y: 0.020;
+        --p2-rot: 6deg;
+        --t1-x: 0.000;
+        --t1-y: 0.120;
+        --t2-x: 0.000;
+        --t2-y: -0.120;
+        height: var(--stage-h);
+    }
+
+    /* Keep your absolute/angled elements active on mobile */
+    .polaroid-bride-photo,
+    .polaroid-groom-photo,
+    .story-info-bride,
+    .story-info-groom {
+        position: absolute;
+        transform: none; /* base reset — the per-element rules below apply */
+    }
+
+    /* Re-apply the transforms explicitly (so nothing gets “unset” by other rules) */
+    .polaroid-bride-photo {
+        left: 0;
+        top: 0;
+        width: var(--photo-w);
+        transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
+        z-index: var(--z-photo);
+    }
+
+    .polaroid-groom-photo {
+        right: 0;
+        bottom: 0;
+        width: var(--photo-w);
+        transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
+        z-index: var(--z-photo);
+    }
+
+    .story-info-bride {
+        right: 0;
+        top: 0;
+        width: var(--text-w);
+        transform: translate3d(var(--t1-tx), var(--t1-ty), 0);
+        z-index: var(--z-text);
+    }
+
+    .story-info-groom {
+        left: 0;
+        bottom: 0;
+        width: var(--text-w);
+        transform: translate3d(var(--t2-tx), var(--t2-ty), 0);
+        z-index: var(--z-text);
+    }
+}
+
+/* Extra-small phones: still keep overlap, just tighter */
+@media (max-width: 420px) {
+    .story-polaroid-collage {
+        --stage-w: calc(100vw - 18px);
+        --stage-aspect: 1.12;
+        --stage-h: clamp(400px, calc(var(--stage-w) * var(--stage-aspect)), 600px);
+        --photo-w: clamp(170px, calc(var(--stage-w) * 0.54), 260px);
+        --text-w: clamp(150px, calc(var(--stage-w) * 0.40), 240px);
+        --t1-y: 0.105;
+        --t2-y: -0.105;
+    }
+}
+
+/* -----------------------------
+   Story Timeline (Dots + ONE SOLID RAIL)
+   IMPORTANT: This version uses ONE rail on .story-timeline-list::before
+   so it cannot break between items.
+----------------------------- */
+.story-timeline-list {
+    width: min(680px, 100%);
+    margin: 42px auto 0;
+    position: relative;
+    overflow: visible;
+    /* tweakables */
+    --rail-col: 28px;
+    --item-gap: 26px;
+    --dot-y: 18px;
+    --rail-w: 2px;
+    --rail-color: #c9c3bc;
+    --dot-size: 10px;
+    --dot-color: #a9a29a;
+    --paper: #ffffff;
+    /* derived */
+    --rail-x: calc(var(--rail-col) / 2);
+    /* make text readable (story-love-card is centered) */
+    text-align: left;
+}
+
+    /* The ONE continuous rail */
+    .story-timeline-list::before {
+        content: "";
+        position: absolute;
+        left: var(--rail-x);
+        transform: translateX(-50%);
+        width: var(--rail-w);
+        top: var(--dot-y);
+        bottom: 0;
+        background: var(--rail-color);
+        z-index: 0;
+    }
+
+    /* Each timeline row */
+    .story-timeline-list .tl-item {
+        display: grid;
+        grid-template-columns: var(--rail-col) 1fr;
+        column-gap: 18px;
+        /* spacing is padding (not margins/gaps) */
+        padding: 0 0 var(--item-gap) 0;
+        margin: 0;
+        align-items: start;
+        position: relative;
+    }
+
+        .story-timeline-list .tl-item:last-child {
+            padding-bottom: 0;
+        }
+
+    /* Left column (holds the dot) */
+    .story-timeline-list .tl-mark {
+        position: relative;
+        width: var(--rail-col);
+        z-index: 3; /* above the rail */
+    }
+
+    /* Cut the rail AFTER the last dot so it doesn't hang below */
+    .story-timeline-list .tl-item:last-child .tl-mark::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: calc(var(--dot-y) + 1px);
+        bottom: 0;
+        width: calc(var(--rail-w) + 10px);
+        background: var(--paper);
+        z-index: 1; /* sits above rail, below dot */
+    }
+
+    /* OPAQUE dot above the rail */
+    .story-timeline-list .tl-dot {
+        position: absolute;
+        left: 50%;
+        top: var(--dot-y);
+        transform: translate(-50%, -50%);
+        width: var(--dot-size);
+        height: var(--dot-size);
+        border-radius: 999px;
+        background: var(--dot-color);
+        border: 3px solid var(--paper);
+        z-index: 3;
+    }
+
+    /* Content */
+    .story-timeline-list .tl-content {
+        min-width: 0;
+        z-index: 1;
+    }
+
+    .story-timeline-list .tl-title {
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 600;
+        font-size: 16px;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: rgba(35, 23, 19, .70);
+        margin: 2px 0 0;
+    }
+
+    .story-timeline-list .tl-text {
+        margin: 12px 0 0;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 1.9;
+        letter-spacing: 0;
+        word-spacing: 0;
+        font-kerning: normal;
+        font-variant-ligatures: normal;
+        color: rgba(35, 23, 19, .60);
+    }
+
+/* Responsive */
+@media (max-width: 720px) {
+    .story-timeline-list {
+        --rail-col: 24px;
+        --item-gap: 22px;
+        --dot-y: 16px;
+    }
+
+        .story-timeline-list .tl-item {
+            column-gap: 14px;
+        }
+}
+
+/* -----------------------------
+   Couple Quad (edge-to-edge 2x2)
+----------------------------- */
+.couple-quad.section {
+    padding: 0;
+    border-top: 1px solid rgba(35,23,19,.14);
+}
+
+    .couple-quad.section::before {
+        opacity: 0;
+    }
+
+.couple-quad .quad-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+.couple-quad .quad-cell {
+    min-height: 420px;
+    position: relative;
+    overflow: hidden;
+}
+
+.couple-quad .quad-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    filter: contrast(1.02) saturate(1.02);
+}
+
+.couple-quad .quad-text {
+    display: grid;
+    align-content: center;
+    padding: clamp(18px, 4vw, 44px);
+    background: rgba(255,255,255,.28);
+    color: var(--ink);
+}
+
+/* reveal effect */
+.js-reveal-quad .quad-photo {
+    opacity: 0;
+    transform: scale(.965);
+    transition: opacity 700ms var(--ease), transform 900ms var(--ease);
+}
+
+.js-reveal-quad .quad-text {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 700ms var(--ease), transform 900ms var(--ease);
+    transition-delay: 240ms;
+}
+
+.js-reveal-quad.is-visible .quad-photo {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.js-reveal-quad.is-visible .quad-text {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.js-reveal-quad .quad-groom {
+    transition-delay: 0ms;
+}
+
+.js-reveal-quad .quad-bride {
+    transition-delay: 120ms;
+}
+
+@media (max-width:760px) {
+    .couple-quad .quad-cell {
+        min-height: 260px;
+    }
+}
+
+/* Generic reveal (kept as you had it) */
+@keyframes revealFadeUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        filter: blur(1px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+        filter: blur(0);
+    }
+}
+
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    filter: blur(1px);
+    will-change: opacity, transform, filter;
+}
+
+    .reveal-on-scroll.is-visible {
+        animation: revealFadeUp 720ms var(--ease) both;
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+    }
+}
+
+/* -----------------------------
+   Album of Love (FULL-BLEED strip + open collage)
+----------------------------- */
+.album-of-love-section {
+    background: #ffffff !important;
+    padding: 90px 0 30px;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+}
+
+
+    /* subtle ambience */
+    .album-of-love-section.section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .10;
+        background: radial-gradient(1200px 680px at 50% 12%, rgba(0,0,0,0.045) 0%, rgba(0,0,0,0.000) 55%), repeating-linear-gradient(115deg, rgba(35,23,19,0.014) 0px, rgba(35,23,19,0.014) 1px, transparent 12px, transparent 26px), repeating-linear-gradient(0deg, rgba(35,23,19,0.010) 0px, rgba(35,23,19,0.010) 1px, transparent 6px, transparent 12px);
+        mix-blend-mode: multiply;
+    }
+
+/* Collage wrapper (centered content) */
+.album-wrap {
+    width: min(820px, calc(100% - 44px));
+    margin: 34px auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.album-flower {
+    position: absolute;
+    right: var(--album-flower-right, 0px);
+    top: var(--album-flower-top, 500px);
+    width: var(--album-flower-width, 220px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.9;
+}
+
+.album-flower img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ===== Film strip (FULL BLEED across the section) ===== */
+.album-filmstrip {
+    --thumb-h: 78px;
+    --gap: 14px;
+    --film: #2b2421;
+    --edge-h: 22px;
+    position: relative;
+    /* FULL BLEED even if you're inside a max-width container */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: var(--film);
+    border-top: 1px solid rgba(0,0,0,.45);
+    border-bottom: 1px solid rgba(0,0,0,.45);
+    box-shadow: 0 18px 60px rgba(0,0,0,.22);
+    overflow: hidden;
+    /* 16:9 frame height control */
+    --film-frame-h: clamp(130px, 14vw, 190px);
+}
+
+    /* perforation bands */
+    .album-filmstrip::before,
+    .album-filmstrip::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: var(--edge-h);
+        pointer-events: none;
+        z-index: 3;
+        background-color: var(--film);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='20' viewBox='0 0 22 20'%3E%3Crect width='22' height='20' fill='transparent'/%3E%3Crect x='0' y='4' width='12' height='12' rx='2.5' ry='2.5' fill='%23ffffff' fill-opacity='0.92'/%3E%3C/svg%3E");
+        background-size: 22px 20px;
+        background-repeat: repeat-x;
+        background-position: 14px 50%;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .album-filmstrip::before {
+        top: 0;
+        border-bottom: 1px solid rgba(0,0,0,.55);
+    }
+
+    .album-filmstrip::after {
+        bottom: 0;
+        border-top: 1px solid rgba(0,0,0,.55);
+    }
+
+/* Keep frames nicely sized/centered inside the full-bleed strip */
+.album-filmtrack {
+    width: min(980px, calc(100vw - 56px));
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0; /* gap handled inside each set for perfect loop distance */
+    padding: calc(var(--edge-h) + 10px) 0;
+    will-change: transform;
+    transform: translate3d(0,0,0);
+}
+
+/* Two identical sets (A then B). A has padding-right so the “between sets” gap matches frame gaps */
+.album-track-set {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--gap);
+    flex: 0 0 auto;
+}
+
+    .album-track-set[data-set="a"] {
+        padding-right: var(--gap);
+    }
+
+/* Frames */
+.album-frame {
+    height: var(--film-frame-h);
+    aspect-ratio: 16 / 9;
+    flex: 0 0 auto;
+    background: #000;
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 10px 22px rgba(0,0,0,.20);
+    overflow: hidden;
+}
+
+    .album-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: contrast(1.02) saturate(1.02);
+    }
+
+/* ===== Film strip motion (SEAMLESS LOOP, moves LEFT) ===== */
+.album-filmstrip.is-loop .album-filmtrack {
+    animation: filmLoop var(--film-loop-speed, 22s) linear infinite;
+}
+
+@keyframes filmLoop {
+    from {
+        transform: translate3d(0,0,0);
+    }
+
+    to {
+        transform: translate3d(calc(-1 * var(--film-loop-distance)),0,0);
+    }
+}
+
+.album-filmstrip.is-loop #albumTrack {
+    will-change: transform;
+    transform: translate3d(0,0,0); /* force GPU */
+}
+
+.album-filmstrip.is-loop #albumTrack {
+    animation-timing-function: linear; /* constant velocity */
+}
+
+/* Pause when hovering the film strip (desktop) */
+.album-filmstrip:hover .album-filmtrack {
+    animation-play-state: running;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .album-filmtrack {
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* ===== Collage (MANUAL XY + ROTATION CONTROLS) ===== */
+.album-collage {
+    width: 100%;
+    position: relative;
+    /* ----- STAGE SIZE ----- */
+    --stage-w: min(760px, 100%);
+    /* MAKE IT TALL ENOUGH (these two are the fix) */
+    --stage-min-h: 1200px; /* bump this until NOTHING is cropped */
+    --stage-aspect: 1.65; /* height = width * aspect (keeps proportions) */
+    --stage-max-h: 1800px; /* safety cap */
+
+    --stage-h: clamp(var(--stage-min-h), calc(var(--stage-w) * var(--stage-aspect)), var(--stage-max-h));
+    height: var(--stage-h);
+    min-height: var(--stage-min-h);
+    margin: 0 auto;
+    overflow: visible;
+    /* ----- CARD WIDTHS ----- */
+    --title-w: clamp(240px, calc(var(--stage-w) * 0.42), 360px);
+    --main-w: clamp(300px, calc(var(--stage-w) * 0.56), 420px);
+    --small-w: clamp(320px, calc(var(--stage-w) * 0.62), 480px);
+    --sub-w: clamp(210px, calc(var(--stage-w) * 0.34), 320px);
+    /* =========================================================
+       MANUAL POSITIONING CONTROLS (YOUR VALUES — UNCHANGED)
+       ========================================================= */
+    --title-x: 0.00;
+    --title-y: 0.00;
+    --title-rot: 0deg;
+    --main-x: 0.6;
+    --main-y: -0.1;
+    --main-rot: 15deg;
+    --small-x: -0.1;
+    --small-y: 0.35;
+    --small-rot: 0deg;
+    --sub-x: 2.2;
+    --sub-y: 0.47;
+    --sub-rot: 0deg;
+    /* ----- DERIVED TRANSLATIONS (DON'T EDIT) ----- */
+    --title-tx: calc(var(--stage-w) * var(--title-x));
+    --title-ty: calc(var(--stage-h) * var(--title-y));
+    --main-tx: calc(var(--stage-w) * var(--main-x));
+    --main-ty: calc(var(--stage-h) * var(--main-y));
+    --small-tx: calc(var(--stage-w) * var(--small-x));
+    --small-ty: calc(var(--stage-h) * var(--small-y));
+    --sub-tx: calc(var(--stage-w) * var(--sub-x));
+    --sub-ty: calc(var(--stage-h) * var(--sub-y));
+}
+
+
+/* small “paper slip” detail */
+.album-scrap {
+    position: absolute;
+    left: 52%;
+    top: 22px;
+    transform: translateX(-50%) rotate(-8deg);
+    width: clamp(140px, 22vw, 210px);
+    height: clamp(46px, 7vw, 64px);
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(35,23,19,.10);
+    box-shadow: 0 18px 46px rgba(0,0,0,.18);
+    z-index: 7;
+    clip-path: polygon(0 0, 100% 0, 92% 100%, 8% 100%);
+}
+
+/* Base card look (photos keep the white polaroid frame) */
+.album-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(255,255,255,.98);
+    border: 1px solid rgba(35,23,19,.12);
+    border-radius: 0 !important;
+    box-shadow: 0 22px 60px rgba(0,0,0,.22);
+    overflow: hidden;
+    transform-origin: 50% 50%;
+}
+
+/* TEXT cards: TRANSPARENT + LEFT ALIGNED */
+.album-card-text {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    display: grid;
+    align-content: center;
+    justify-items: start; /* left align contents */
+    text-align: left;
+    padding: 10px 6px; /* invisible click-safe area */
+    gap: 10px;
+}
+
+/* Type styling */
+.album-the {
+    font-size: clamp(40px, 5vw, 68px);
+    line-height: 1;
+    color: rgba(35,23,19,.42);
+}
+
+.album-word {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-size: clamp(22px, 3.4vw, 36px);
+    color: rgba(35,23,19,.58);
+}
+
+.album-word-strong {
+    letter-spacing: .20em;
+    color: rgba(35,23,19,.62);
+}
+
+/* Two lines, left aligned (The / ALBUM) and (OF / LOVE) */
+.album-text-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 8px;
+    white-space: normal;
+}
+
+/* Photo cards */
+.album-card-photo {
+    padding: 14px 14px 44px;
+}
+
+    .album-card-photo img {
+        width: 100%;
+        display: block;
+        border-radius: 0 !important;
+        outline: 1px solid rgba(0,0,0,.06);
+        filter: contrast(1.02) saturate(1.02);
+    }
+
+/* --------- MANUAL POSITIONS (driven by variables above) --------- */
+
+/* Title */
+.album-card-title {
+    width: var(--title-w);
+    height: clamp(240px, 42vw, 360px);
+    transform: translate3d(var(--title-tx), var(--title-ty), 0) rotate(var(--title-rot));
+    z-index: 3;
+}
+
+/* Main portrait */
+.album-card-main {
+    width: var(--main-w);
+    transform: translate3d(var(--main-tx), var(--main-ty), 0) rotate(var(--main-rot));
+    z-index: 5;
+}
+
+    .album-card-main img {
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+    }
+
+/* Bottom-left photo */
+.album-card-small {
+    width: var(--small-w);
+    transform: translate3d(var(--small-tx), var(--small-ty), 0) rotate(var(--small-rot));
+    z-index: 4;
+}
+
+    .album-card-small img {
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+    }
+
+/* Sub text */
+.album-card-sub {
+    width: var(--sub-w);
+    height: clamp(170px, 26vw, 240px);
+    transform: translate3d(var(--sub-tx), var(--sub-ty), 0) rotate(var(--sub-rot));
+    z-index: 6;
+}
+
+/* Mobile: KEEP the angled collage (no stacking) */
+@media (max-width: 720px) {
+    .album-of-love-section {
+        padding: 76px 0 30px;
+    }
+
+    .album-filmstrip {
+        overflow-x: hidden;
+    }
+
+    .album-filmtrack {
+        width: max-content;
+        margin: 0;
+        display: flex;
+        gap: 0;
+        padding: 44px 14px;
+    }
+
+    .album-track-set {
+        display: flex;
+        gap: 14px; /* whole pixel */
+    }
+
+    .album-track-set[data-set="a"] {
+        padding-right: 14px;
+    }
+
+    .album-frame {
+        flex: 0 0 auto;
+        width: 180px; /* example fixed width */
+    }
+
+    .album-wrap {
+        margin-top: 22px;
+    }
+
+    .album-collage {
+        width: 100%;
+        position: relative;
+        overflow: visible;
+        --stage-w: min(560px, calc(100vw - 24px));
+        --stage-min-h: 980px;
+        --stage-aspect: 1.72;
+        --stage-max-h: 1500px;
+        --stage-h: clamp(var(--stage-min-h), calc(var(--stage-w) * var(--stage-aspect)), var(--stage-max-h));
+        height: var(--stage-h);
+        min-height: var(--stage-min-h);
+        --title-w: clamp(210px, calc(var(--stage-w) * 0.44), 320px);
+        --main-w: clamp(260px, calc(var(--stage-w) * 0.60), 380px);
+        --small-w: clamp(280px, calc(var(--stage-w) * 0.68), 420px);
+        --sub-w: clamp(190px, calc(var(--stage-w) * 0.38), 300px);
+        /* keep the bottom photo overlapping the top photo on phones */
+        --small-y: 0.20;
+        /* FIX: keep "OF LOVE" inside the viewport on phones */
+        --sub-x: 0.72;
+        --sub-y: 0.47;
+        /* rotation stays from your desktop vars */
+    }
+
+    .album-card {
+        position: absolute;
+        transform-origin: 50% 50%;
+    }
+
+    .album-card-title {
+        width: var(--title-w);
+        height: clamp(220px, 48vw, 320px);
+        transform: translate3d(var(--title-tx), var(--title-ty), 0) rotate(var(--title-rot));
+        z-index: 3;
+    }
+
+    .album-card-main {
+        width: var(--main-w);
+        transform: translate3d(var(--main-tx), var(--main-ty), 0) rotate(var(--main-rot));
+        z-index: 5;
+    }
+
+    .album-card-small {
+        width: var(--small-w);
+        transform: translate3d(var(--small-tx), var(--small-ty), 0) rotate(var(--small-rot));
+        z-index: 4;
+    }
+
+    .album-card-sub {
+        width: var(--sub-w);
+        height: clamp(150px, 30vw, 220px);
+        transform: translate3d(var(--sub-tx), var(--sub-ty), 0) rotate(var(--sub-rot));
+        z-index: 6;
+    }
+
+    .album-scrap {
+        display: none;
+    }
+}
+
+/* Extra-small phones */
+@media (max-width: 420px) {
+    .album-collage {
+        --stage-w: calc(100vw - 18px);
+        --stage-min-h: 920px;
+        --stage-aspect: 1.78;
+        --title-w: clamp(200px, calc(var(--stage-w) * 0.46), 300px);
+        --main-w: clamp(250px, calc(var(--stage-w) * 0.62), 360px);
+        --small-w: clamp(260px, calc(var(--stage-w) * 0.72), 400px);
+        --sub-w: clamp(180px, calc(var(--stage-w) * 0.40), 280px);
+        /* ✅ tighter phones: pull it a bit further left */
+        --sub-x: 0.64;
+        --sub-y: 0.47;
+    }
+}
+
+/* Extra-small phones: keep overlap, reduce stage + widths */
+@media (max-width: 420px) {
+    .album-collage {
+        --stage-w: calc(100vw - 18px);
+        --stage-min-h: 920px;
+        --stage-aspect: 1.78;
+        --title-w: clamp(200px, calc(var(--stage-w) * 0.46), 300px);
+        --main-w: clamp(250px, calc(var(--stage-w) * 0.62), 360px);
+        --small-w: clamp(260px, calc(var(--stage-w) * 0.72), 400px);
+        --sub-w: clamp(180px, calc(var(--stage-w) * 0.40), 280px);
+        --small-y: 0.18;
+    }
+}
+
+/* -----------------------------
+   Photo Gallery (FULL BLEED, white)
+   - Main photo BLEEDS edge-to-edge (arrows overlay on top)
+   - Thumbs are PORTRAIT 9:16, square corners
+   - Active thumb ALWAYS centers (even first/last) via scroll-padding trick
+----------------------------- */
+.gallery-viewer-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: #ffffff !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+}
+
+    /* Kill any texture overlay from .section */
+    .gallery-viewer-section.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+/* ===== Stage (FULL BLEED) ===== */
+.gallery-stage {
+    --arrow-hit: 84px;
+    --frame-h: clamp(1000px, 88vh, 1100px);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: #ffffff;
+    /* IMPORTANT: no gutters — photo can reach edges */
+    position: relative;
+    height: var(--frame-h);
+    overflow: hidden;
+}
+
+/* ===== Main frame: FULL BLEED (fills the stage) ===== */
+.gallery-frame {
+    position: absolute;
+    inset: 0; /* full bleed */
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.gallery-mainimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fills stage edge-to-edge */
+    object-position: center;
+    display: block;
+}
+
+/* ===== Arrows: thicker WHITE chevrons, no container ===== */
+.gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--arrow-hit);
+    height: var(--arrow-hit);
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    z-index: 5; /* above the image */
+}
+
+.gallery-arrow-left {
+    left: 0;
+}
+
+.gallery-arrow-right {
+    right: 0;
+}
+
+.gallery-arrow::after {
+    content: "";
+    width: 22px;
+    height: 22px;
+    border-top: 6px solid rgba(255,255,255,.98);
+    border-right: 6px solid rgba(255,255,255,.98);
+    transform: rotate(45deg);
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.34));
+}
+
+.gallery-arrow-left::after {
+    transform: rotate(225deg);
+}
+
+.gallery-arrow:hover {
+    transform: translateY(-50%) scale(1.05);
+}
+
+.gallery-arrow:active {
+    transform: translateY(-50%) scale(0.98);
+}
+
+/* ===== Thumbnails row (WHITE, PORTRAIT) ===== */
+.gallery-thumbs {
+    --thumb-h: 96px;
+    --thumb-w: calc(var(--thumb-h) * 9 / 16);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    display: flex;
+    gap: 12px;
+    background: #ffffff;
+    border-top: 1px solid rgba(0,0,0,.10);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: calc(50vw - (var(--thumb-w) / 2));
+    padding-right: calc(50vw - (var(--thumb-w) / 2));
+}
+
+    .gallery-thumbs::-webkit-scrollbar {
+        height: 0;
+    }
+
+.gallery-thumb {
+    flex: 0 0 auto;
+    height: var(--thumb-h);
+    aspect-ratio: 9 / 16;
+    width: auto;
+    border-radius: 0; /* NO rounded corners */
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,.12);
+    background: #fff;
+    cursor: pointer;
+    padding: 0;
+}
+
+    .gallery-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        opacity: 0.60;
+    }
+
+    .gallery-thumb.is-active {
+        border-color: rgba(0,0,0,.12);
+        box-shadow: none;
+    }
+
+        .gallery-thumb.is-active img {
+            opacity: 1;
+        }
+
+/* Mobile tuning */
+@media (max-width: 720px) {
+    .gallery-stage {
+        --arrow-hit: 72px;
+        --frame-h: clamp(420px, 70vh, 760px);
+    }
+
+    .gallery-arrow::after {
+        width: 20px;
+        height: 20px;
+        border-top-width: 6px;
+        border-right-width: 6px;
+    }
+
+    .gallery-thumbs {
+        --thumb-h: 88px;
+        gap: 10px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+/* -----------------------------
+   Dress Code (dynamic dots, white)
+----------------------------- */
+.dress-code-section {
+    background: #ffffff !important;
+    padding: 78px 0 72px;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    text-align: center;
+}
+
+    /* Kill any texture overlay from .section */
+    .dress-code-section.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+.dress-code-inner {
+    width: min(640px, calc(100% - 44px));
+    margin: 0 auto;
+}
+
+.dress-code-title {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-size: clamp(16px, 2.2vw, 22px);
+    color: rgba(35,23,19,.72);
+}
+
+.dress-code-dots {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center; /* centered as a group */
+    align-items: center;
+    gap: clamp(14px, 2.2vw, 22px); /* evenly spaced */
+}
+
+.dress-dot {
+    --dot: clamp(18px, 2.3vw, 26px);
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 999px;
+    background: #ddd;
+    border: 1px solid rgba(0,0,0,.10);
+    box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+
+
+/* =======================================================================
+   TIMELINE (matches your HTML)
+   ======================================================================= */
+
+#timeline.timeline-hero-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: #000;
+    padding: 0 !important;
+    border: 0 !important;
+    /* ===== MASTER TUNING KNOBS ===== */
+    --tl-h: clamp(560px, 82vh, 980px); /* section height */
+    --tl-photo-pos: center; /* may be overridden inline */
+    --tl-scrim-top: rgba(0,0,0,.28);
+    --tl-scrim-bot: rgba(0,0,0,.72);
+    /* Rail & dots */
+    --rail-y: 62%; /* rail vertical position within the rail box */
+    --rail-thickness: 3px;
+    --rail-color: rgba(255,255,255,.88);
+    --dot-size: 10px;
+    /* Spacing (dot -> icon / dot -> time) */
+    --icon-gap: clamp(16px, 2.4vw, 28px);
+    --text-gap: clamp(16px, 2.4vw, 30px);
+    /* Typography */
+    --tl-title-size: clamp(30px, 4.2vw, 54px);
+    --tl-time-size: clamp(14px, 1.55vw, 18px);
+    --tl-label-size: clamp(10px, 1.15vw, 13px);
+}
+
+    /* If you have a global .section::before "paper texture", kill it here */
+    #timeline.timeline-hero-section.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+/* Full-bleed photo layer */
+#timeline .timeline-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: var(--tl-photo, url("./assets/photos/05.jpg"));
+    background-size: cover;
+    background-position: var(--tl-photo-pos, center);
+    transform: scale(1.01);
+    filter: saturate(1.02) contrast(1.02);
+}
+
+    /* Scrim overlay for readability */
+    #timeline .timeline-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(1200px 680px at 50% 18%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 55%), linear-gradient(to bottom, var(--tl-scrim-top) 0%, rgba(0,0,0,0) 44%, var(--tl-scrim-bot) 100%);
+    }
+
+/* Foreground content layer */
+#timeline .timeline-overlay {
+    position: relative;
+    z-index: 1;
+    height: var(--tl-h);
+    width: 100%;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    padding: clamp(46px, 6vh, 84px) 0 clamp(36px, 6vh, 72px);
+}
+
+/* Title */
+#timeline .timeline-title {
+    text-align: center;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.92);
+    font-size: var(--tl-title-size);
+    margin: 0 0 clamp(22px, 3vh, 34px) 0;
+    text-shadow: 0 18px 44px rgba(0,0,0,.45);
+}
+
+/* Rail container (holds the line + nodes) */
+#timeline .timeline-rail {
+    position: relative;
+    width: min(980px, calc(100% - 44px));
+    height: clamp(260px, 36vh, 420px);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: start;
+}
+
+    /* The horizontal rail line */
+    #timeline .timeline-rail::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: var(--rail-y);
+        height: var(--rail-thickness);
+        background: var(--rail-color);
+        transform: translateY(-50%);
+        box-shadow: 0 18px 44px rgba(0,0,0,.35);
+        z-index: 1;
+    }
+
+    /* Each node column */
+    #timeline .timeline-rail .tl-node {
+        position: relative;
+        height: 100%;
+        text-align: center;
+        /* ===== ICON TWEAK DEFAULTS (override per-node below) ===== */
+        --icon-size: clamp(28px, 3.8vw, 46px); /* responsive base size */
+        --icon-scale: 1;
+        --icon-nx: 0; /* nudge X in icon-size units */
+        --icon-ny: 0; /* nudge Y in icon-size units */
+        --icon-rot: 0deg; /* rotation */
+    }
+
+    /* Dot */
+    #timeline .timeline-rail .tl-dot {
+        position: absolute;
+        left: 50%;
+        top: var(--rail-y);
+        width: var(--dot-size);
+        height: var(--dot-size);
+        transform: translate(-50%, -50%);
+        border-radius: 999px;
+        background: rgba(255,255,255,.96);
+        box-shadow: 0 14px 24px rgba(0,0,0,.38);
+        z-index: 3;
+    }
+
+    /* Icon (above the dot). Offsets scale with icon-size, so it stays “locked” to the dot on resize. */
+    #timeline .timeline-rail .tl-icon {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--rail-y) - var(--icon-gap));
+        width: calc(var(--icon-size) * var(--icon-scale));
+        height: auto;
+        transform: translate(-50%, -100%) translate(calc(var(--icon-nx) * var(--icon-size)), calc(var(--icon-ny) * var(--icon-size))) rotate(var(--icon-rot));
+        transform-origin: center;
+        opacity: .95;
+        filter: drop-shadow(0 16px 18px rgba(0,0,0,.45));
+        pointer-events: none;
+        user-select: none;
+        z-index: 4;
+        will-change: transform, opacity;
+    }
+
+    /* Time (below rail) */
+    #timeline .timeline-rail .tl-time {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--rail-y) + var(--text-gap));
+        transform: translate(-50%, 0);
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 600;
+        font-size: var(--tl-time-size);
+        letter-spacing: .10em;
+        color: rgba(255,255,255,.92);
+        text-shadow: 0 18px 44px rgba(0,0,0,.45);
+        white-space: nowrap;
+        z-index: 4;
+    }
+
+    /* Label (below time) */
+    #timeline .timeline-rail .tl-label {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--rail-y) + var(--text-gap) + clamp(18px, 2.2vw, 24px));
+        transform: translate(-50%, 0);
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 600;
+        font-size: var(--tl-label-size);
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        line-height: 1.35;
+        color: rgba(255,255,255,.90);
+        text-shadow: 0 18px 44px rgba(0,0,0,.45);
+        z-index: 4;
+    }
+
+    /* ===== PER-NODE ICON TWEAKS (edit these 4 blocks) ===== */
+    #timeline .timeline-rail .tl-node:nth-child(1) {
+        /* camera */
+        --icon-scale: 2.00;
+        --icon-nx: -0.1;
+        --icon-ny: 0.75;
+        --icon-rot: 0deg;
+    }
+
+    #timeline .timeline-rail .tl-node:nth-child(2) {
+        /* rings */
+        --icon-scale: 2.00;
+        --icon-nx: 0.00;
+        --icon-ny: 1.10;
+        --icon-rot: 0deg;
+    }
+
+    #timeline .timeline-rail .tl-node:nth-child(3) {
+        /* dinner plate */
+        --icon-scale: 2.00;
+        --icon-nx: 0.00;
+        --icon-ny: 1.00;
+        --icon-rot: 0deg;
+    }
+
+    #timeline .timeline-rail .tl-node:nth-child(4) {
+        /* disco ball */
+        --icon-scale: 1.50;
+        --icon-nx: 0.40;
+        --icon-ny: 0.50;
+        --icon-rot: 0deg;
+    }
+
+    /* =======================================================================
+   TIMELINE REVEAL (rail + dots + icons) — ONCE via #timeline.is-visible
+   ======================================================================= */
+
+    /* Rail draws left->right */
+    #timeline .timeline-rail::before {
+        transform: translateY(-50%) scaleX(0);
+        transform-origin: 0% 50%;
+        opacity: 0;
+        transition: transform 1400ms var(--ease), opacity 420ms var(--ease);
+    }
+
+    /* Dots pop in */
+    #timeline .timeline-rail .tl-dot {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 1000ms var(--ease), opacity 420ms var(--ease);
+    }
+
+    /* Icons float in (without breaking your positioning transform) */
+    #timeline .timeline-rail .tl-icon {
+        opacity: 0;
+        transform: translate(-50%, -100%) translate(calc(var(--icon-nx) * var(--icon-size)), calc(var(--icon-ny) * var(--icon-size))) rotate(var(--icon-rot)) translateY(12px) scale(0.92);
+        transition: transform 1300ms var(--ease), opacity 520ms var(--ease);
+    }
+
+    /* (Optional) time/label fade with the icon */
+    #timeline .timeline-rail .tl-time,
+    #timeline .timeline-rail .tl-label {
+        opacity: 0;
+        transform: translate(-50%, 0) translateY(10px);
+        transition: transform 1100ms var(--ease), opacity 520ms var(--ease);
+    }
+
+/* Title subtle fade-in */
+#timeline .timeline-title {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: transform 1100ms var(--ease), opacity 520ms var(--ease);
+}
+
+/* Activate */
+#timeline.is-visible .timeline-title {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 80ms;
+}
+
+#timeline.is-visible .timeline-rail::before {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1);
+    transition-delay: 160ms;
+}
+
+/* Stagger per node */
+#timeline.is-visible .timeline-rail .tl-node:nth-child(1) .tl-dot {
+    transition-delay: 300ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(2) .tl-dot {
+    transition-delay: 420ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(3) .tl-dot {
+    transition-delay: 540ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(4) .tl-dot {
+    transition-delay: 660ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(1) .tl-icon {
+    transition-delay: 420ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(2) .tl-icon {
+    transition-delay: 540ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(3) .tl-icon {
+    transition-delay: 660ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(4) .tl-icon {
+    transition-delay: 780ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(1) .tl-time,
+#timeline.is-visible .timeline-rail .tl-node:nth-child(1) .tl-label {
+    transition-delay: 520ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(2) .tl-time,
+#timeline.is-visible .timeline-rail .tl-node:nth-child(2) .tl-label {
+    transition-delay: 640ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(3) .tl-time,
+#timeline.is-visible .timeline-rail .tl-node:nth-child(3) .tl-label {
+    transition-delay: 760ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-node:nth-child(4) .tl-time,
+#timeline.is-visible .timeline-rail .tl-node:nth-child(4) .tl-label {
+    transition-delay: 880ms;
+}
+
+#timeline.is-visible .timeline-rail .tl-dot {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#timeline.is-visible .timeline-rail .tl-icon {
+    opacity: .95;
+    transform: translate(-50%, -100%) translate(calc(var(--icon-nx) * var(--icon-size)), calc(var(--icon-ny) * var(--icon-size))) rotate(var(--icon-rot)) translateY(0px) scale(1);
+}
+
+#timeline.is-visible .timeline-rail .tl-time,
+#timeline.is-visible .timeline-rail .tl-label {
+    opacity: 1;
+    transform: translate(-50%, 0) translateY(0);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 760px) {
+    #timeline.timeline-hero-section {
+        --rail-y: 60%;
+        --icon-gap: clamp(14px, 3vw, 20px);
+        --text-gap: clamp(14px, 3vw, 22px);
+        --rail-thickness: 2.5px;
+        --dot-size: 9px;
+    }
+
+    #timeline .timeline-rail {
+        width: min(980px, calc(100% - 28px));
+        height: clamp(240px, 34vh, 360px);
+    }
+
+        #timeline .timeline-rail .tl-label {
+            letter-spacing: .14em;
+        }
+}
+
+@media (max-width: 520px) {
+    #timeline.timeline-hero-section {
+        --tl-h: clamp(520px, 78vh, 860px);
+        --rail-y: 62%;
+    }
+
+    #timeline .timeline-rail .tl-label {
+        font-size: clamp(9px, 2.6vw, 12px);
+        letter-spacing: .12em;
+    }
+
+    #timeline .timeline-rail .tl-time {
+        font-size: clamp(13px, 3.2vw, 16px);
+        letter-spacing: .09em;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    #timeline .timeline-bg {
+        transform: none !important;
+    }
+
+    #timeline .timeline-title,
+    #timeline .timeline-rail::before,
+    #timeline .timeline-rail .tl-dot,
+    #timeline .timeline-rail .tl-icon,
+    #timeline .timeline-rail .tl-time,
+    #timeline .timeline-rail .tl-label {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+
+/* -----------------------------
+   Calendar Section (Cream + Red Ink)
+----------------------------- */
+.calendar-section {
+    color: var(--ink);
+    --border: rgba(157,18,43,.22);
+    --card: rgba(255,255,255,.48);
+    --shadow: 0 18px 55px rgba(157,18,43,.12);
+    /* Wide art controls */
+    --cal-art-src: url("./assets/drawings/flowerbutterly_wide_realistic.png");
+    --cal-art-gap: 0px;
+    --cal-art-y: -300px;
+    --cal-art-width: 100vw;
+    /* Art aspect ratio */
+    --cal-art-aspect-w: 1820;
+    --cal-art-aspect-h: 1016;
+    /* Trim bottom whitespace */
+    --cal-art-trim: 180px;
+    /* Derived art height */
+    --cal-art-h: calc(var(--cal-art-width) * var(--cal-art-aspect-h) / var(--cal-art-aspect-w));
+    /* Reserve art space */
+    padding-bottom: calc( 64px + clamp( 0px, calc(var(--cal-art-h) + var(--cal-art-gap) + var(--cal-art-y) - var(--cal-art-trim)), 1200px ) );
+    position: relative;
+    overflow: hidden;
+}
+
+    /* Disable the default paper texture pseudo-element on .section */
+    .calendar-section.section::before {
+        content: none;
+        display: none;
+    }
+
+.calendar-card {
+    margin: 14px auto 0;
+    width: min(520px, 100%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(1px);
+    position: relative;
+    overflow: visible;
+    isolation: isolate;
+    /* Wedding heart SVG */
+    --wedding-heart-src: url("./assets/drawings/calendarloveheart.svg");
+    /* Heart tuning knobs */
+    --wedding-heart-inset: 6px;
+    --wedding-heart-size: 150%;
+    --wedding-heart-nudge-x: 38px;
+    --wedding-heart-nudge-y: 35px;
+    --wedding-heart-opacity: 1;
+    /* Heart “pop out” tuning */
+    --wedding-heart-pop: 10px;
+    --wedding-heart-rotate: 0deg;
+}
+
+    /* Single wide art below the calendar */
+    .calendar-card::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: calc(100% + var(--cal-art-gap));
+        transform: translateX(-50%) translateY(var(--cal-art-y));
+        width: var(--cal-art-width);
+        aspect-ratio: var(--cal-art-aspect-w) / var(--cal-art-aspect-h);
+        height: auto;
+        background-image: var(--cal-art-src);
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        background-size: contain;
+        opacity: 1;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+.calendar-head {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.calendar-month {
+    font-family: var(--font-name);
+    font-weight: 800;
+    letter-spacing: .2px;
+    font-size: 18px;
+    color: var(--accent);
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+    text-align: center;
+    font-family: var(--font-name);
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(157,18,43,.82);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap: 8px;
+    overflow: visible;
+}
+
+.cal-cell {
+    aspect-ratio: 1/1;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: visible;
+    border: 1px solid rgba(157,18,43,.22);
+    background: rgba(255,255,255,.55);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.60);
+}
+
+    .cal-cell.is-empty {
+        background: rgba(255,255,255,.28);
+        border-color: rgba(157,18,43,.10);
+        box-shadow: none;
+    }
+
+.cal-day {
+    font-family: var(--font-name);
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+}
+
+.cal-cell.is-wedding {
+    background: linear-gradient(180deg, rgba(157,18,43,.16), rgba(157,18,43,.08));
+    border-color: rgba(157,18,43,.55);
+}
+
+    .cal-cell.is-wedding .cal-day {
+        color: var(--accent);
+        font-size: 16px;
+    }
+
+@keyframes heartPulse {
+    0%,100% {
+        transform: scale(1);
+        opacity: .95;
+    }
+
+    50% {
+        transform: scale(1.07);
+        opacity: 1;
+    }
+}
+
+/* Wedding heart — pops outside the cell */
+.cal-cell.is-wedding::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--wedding-heart-inset) * -1 - var(--wedding-heart-pop));
+    pointer-events: none;
+    background-image: var(--wedding-heart-src);
+    background-repeat: no-repeat;
+    background-size: var(--wedding-heart-size) auto;
+    background-position: calc(50% + var(--wedding-heart-nudge-x)) calc(50% + var(--wedding-heart-nudge-y));
+    opacity: var(--wedding-heart-opacity);
+    transform-origin: center;
+    transform: rotate(var(--wedding-heart-rotate));
+    animation: heartPulse 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cal-cell.is-wedding::after {
+        animation: none !important;
+    }
+}
+
+.calendar-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.cal-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(157,18,43,.45);
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    color: rgba(255,255,255,.96);
+    cursor: pointer;
+    box-shadow: 0 12px 30px rgba(157,18,43,.18);
+    font-weight: 900;
+    transition: transform var(--fast) var(--ease), filter var(--fast) var(--ease);
+}
+
+    .cal-add-btn:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.03);
+    }
+
+    .cal-add-btn:active {
+        transform: translateY(0);
+    }
+
+    .cal-add-btn:focus-visible {
+        outline: 2px solid rgba(157,18,43,.55);
+        outline-offset: 3px;
+    }
+
+.cal-add-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-grid;
+    place-items: center;
+    opacity: .98;
+}
+
+    .cal-add-icon svg {
+        width: 20px;
+        height: 20px;
+        display: block;
+    }
+
+/* -----------------------------
+   Location (invitation-style)
+----------------------------- */
+.location-details-section {
+    background: #ffffff !important;
+    padding: 88px 0 96px;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+}
+
+    /* Disable paper texture on this section */
+    .location-details-section.section::before {
+        content: none !important;
+        display: none !important;
+    }
+
+.location-card {
+    width: min(720px, calc(100% - 44px));
+    margin: 0 auto;
+    text-align: center;
+    color: rgba(35,23,19,.86);
+}
+
+.location-head {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(35,23,19,.72);
+}
+
+.location-venue {
+    margin-top: 10px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(35,23,19,.72);
+}
+
+.location-rule {
+    width: min(520px, 86%);
+    height: 1px;
+    background: rgba(35,23,19,.22);
+    margin: 16px auto;
+}
+
+.location-rule-bottom {
+    margin-top: 22px;
+}
+
+/* Map frame */
+.location-map-wrap {
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(35,23,19,.18);
+    background: rgba(255,255,255,.72);
+}
+
+    .location-map-wrap iframe {
+        width: 100%;
+        height: 340px;
+        border: 0;
+        display: block;
+    }
+
+/* Address */
+.location-address {
+    margin-top: 18px;
+}
+
+.location-label {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(35,23,19,.72);
+    margin-bottom: 10px;
+}
+
+.location-text {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.85;
+    letter-spacing: .01em;
+    color: rgba(35,23,19,.62);
+    width: min(520px, 92%);
+    margin: 0 auto;
+}
+
+/* Actions styled like the invite “CHỈ ĐƯỜNG” */
+.location-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.location-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(35,23,19,.58);
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    transition: opacity var(--fast) var(--ease), transform var(--fast) var(--ease);
+}
+
+    .location-link svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .location-link:hover {
+        opacity: .9;
+        transform: translateY(-1px);
+    }
+
+    .location-link:active {
+        transform: translateY(0);
+    }
+
+    .location-link:focus-visible {
+        outline: 2px solid rgba(35,23,19,.28);
+        outline-offset: 4px;
+        border-radius: 10px;
+    }
+
+.location-actions .copy-status {
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-size: 12px;
+    letter-spacing: .02em;
+    color: rgba(35,23,19,.58);
+}
+
+@media (max-width: 560px) {
+    .location-details-section {
+        padding: 76px 0 86px;
+    }
+
+    .location-map-wrap iframe {
+        height: 320px;
+    }
+}
+
+/* ===== RSVP (FORM LIKE EXAMPLE) ===== */
+.rsvp-section {
+    background: #fff;
+    padding: clamp(56px,8vw,92px) 0;
+    /* Entire section in Times New Roman */
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    color: rgba(35,23,19,.86);
+}
+
+.rsvp-inner {
+    width: min(720px,calc(100% - 40px));
+    margin: 0 auto;
+}
+
+.rsvp-intro {
+    margin: 0 0 18px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.55;
+    letter-spacing: .01em;
+    color: rgba(35,23,19,.70);
+}
+
+/* No outer “card/container” around fields */
+.rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+}
+
+/* Shared field styling */
+.rsvp-field {
+    width: 100%;
+    font: inherit; /* keep Times New Roman */
+    font-size: 16px;
+    line-height: 1.25;
+    background: transparent;
+    color: rgba(35,23,19,.86);
+    border: 1px solid rgba(0,0,0,.28);
+    border-radius: 999px;
+    padding: 14px 18px;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+    .rsvp-field::placeholder {
+        color: rgba(35,23,19,.55);
+    }
+
+    .rsvp-field:focus {
+        border-color: rgba(0,0,0,.50);
+    }
+
+/* Textarea (rounded rectangle like the example) */
+.rsvp-textarea {
+    border-radius: 26px;
+    min-height: 120px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    resize: vertical;
+}
+
+/* Select: custom “nice” look + chevron */
+.rsvp-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* leave space for chevron */
+    padding-right: 52px;
+    /* subtle “select” affordance */
+    background-color: transparent;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='rgba(35,23,19,0.70)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 18px 18px;
+    cursor: pointer;
+}
+
+    /* Placeholder (disabled selected option) looks softer */
+    .rsvp-select:required:invalid {
+        color: rgba(35,23,19,.55);
+    }
+
+    /* Some browsers honor this for option text */
+    .rsvp-select option {
+        color: rgba(35,23,19,.86);
+    }
+
+/* Submit button: round, outlined, bottom-right */
+.rsvp-submit {
+    align-self: flex-end;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    border: 2px solid rgba(0,0,0,.35);
+    background: transparent;
+    display: grid;
+    place-items: center;
+    font: inherit; /* Times New Roman */
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    margin-top: 2px;
+    transition: transform 120ms var(--ease);
+}
+
+    .rsvp-submit:hover {
+        transform: translateY(-1px);
+    }
+
+    .rsvp-submit:active {
+        transform: translateY(0);
+    }
+
+    .rsvp-submit:focus-visible {
+        outline: 2px solid rgba(0,0,0,.35);
+        outline-offset: 4px;
+    }
+
+/* Mobile tuning */
+@media (max-width:560px) {
+    .rsvp-intro {
+        font-size: 13px;
+    }
+
+    .rsvp-field {
+        font-size: 16px;
+        padding: 13px 16px;
+    }
+
+    .rsvp-select {
+        padding-right: 48px;
+        background-position: right 16px center;
+    }
+
+    .rsvp-submit {
+        width: 54px;
+        height: 54px;
+    }
+}
+
+/* -----------------------------
+   Footer
+----------------------------- */
+.footer {
+    border-top: 1px solid rgba(35,23,19,.14);
+    background: var(--cream-1);
+    color: var(--ink);
+    padding: 54px 0 70px;
+    text-align: center;
+    position: relative;
+}
+
+    .footer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .14;
+        background: radial-gradient(1200px 700px at 50% 18%, rgba(255,255,255,.60) 0%, rgba(255,255,255,.18) 48%, rgba(0,0,0,.045) 100%);
+    }
+
+    .footer > .container {
+        position: relative;
+        z-index: 1;
+    }
+
+.footer-script {
+    font-size: 42px;
+}
+
+.footer-names {
+    margin-top: 6px;
+    color: var(--ink-muted);
+
+    font-family: var(--font-script);
+    letter-spacing: 0.5px;
+}
+
+/* ===== Overlay: card flip flow ===== */
+.overlay.overlay-invite {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    background: var(--cream-0);
+    --text: var(--ink);
+    --muted: var(--ink-muted);
+}
+
+    .overlay.overlay-invite::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: .12;
+        background: radial-gradient(1200px 700px at 50% 18%, rgba(255,255,255,0.70) 0%, rgba(255,255,255,0.18) 48%, rgba(0,0,0,0.04) 100%), repeating-linear-gradient(115deg, rgba(35,23,19,0.018) 0px, rgba(35,23,19,0.018) 1px, transparent 11px, transparent 24px), repeating-linear-gradient(0deg, rgba(35,23,19,0.016) 0px, rgba(35,23,19,0.016) 1px, transparent 4px, transparent 9px);
+        mix-blend-mode: multiply;
+    }
+
+.overlay.hidden {
+    display: none;
+}
+
+.invite-stage {
+    position: relative;
+    z-index: 1;
+    width: min(900px, calc(100% - 32px));
+    perspective: 1400px;
+}
+
+/* Card container */
+.invite-card {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border-radius: 22px;
+    cursor: pointer;
+    outline: none;
+}
+
+    .invite-card:focus-visible {
+        outline: 3px solid rgba(157,18,43,0.35);
+        outline-offset: 6px;
+    }
+
+.invite-card-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    transform-style: preserve-3d;
+    transition: transform 820ms var(--ease);
+    position: relative;
+    box-shadow: 0 28px 90px rgba(35,23,19,0.18);
+}
+
+.invite-card.is-flipped .invite-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Faces */
+.invite-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.invite-back {
+    transform: rotateY(180deg);
+}
+
+/* -----------------------------
+   Cover (Front of invite card)
+----------------------------- */
+.invite-paper {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 210px;
+    gap: 0;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid rgba(35,23,19,0.18);
+    border-radius: 22px;
+}
+
+/* Front layout */
+.invite-left {
+    padding: clamp(18px, 3.2vw, 36px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    color: var(--ink);
+    --cover-text-w: min(560px, 100%);
+    /*
+      IMPORTANT TWEAK:
+      Positive = move “Kính mời” right
+      Negative = move it left
+    */
+    --kinh-nudge: clamp(36px, 9vw, 90px);
+}
+
+/* Topline centered */
+.invite-topline {
+    width: var(--cover-text-w);
+    margin: 0 auto;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: rgba(35,23,19,0.80);
+    text-align: center;
+}
+
+    .invite-topline .the {
+        font-family: var(--font-script);
+        letter-spacing: 0;
+        text-transform: none;
+        margin: 0 6px;
+        font-size: 22px;
+        color: rgba(35,23,19,0.70);
+    }
+
+    .invite-topline .save,
+    .invite-topline .date {
+        font-size: 18px;
+    }
+
+/* Names centered */
+.invite-names {
+    width: var(--cover-text-w);
+    margin: 6px auto 2px;
+    font-size: clamp(24px, 3vw, 40px);
+    line-height: 1.15;
+    color: rgba(35,23,19,0.92);
+    text-align: center;
+}
+
+/* “Kính mời” below names, but nudged horizontally */
+.invite-small {
+    width: fit-content;
+    margin: 10px auto 0;
+    transform: translateX(var(--kinh-nudge));
+    font-size: 13px;
+    color: rgba(35,23,19,0.62);
+    text-align: left;
+}
+
+/* Remove the line under “Kính mời” */
+.invite-line {
+    display: none;
+}
+
+/* Right date column */
+.invite-datecol {
+    border-left: 1px solid rgba(35,23,19,0.18);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 4px;
+    background: rgba(255,255,255,0.62);
+    overflow: hidden;
+}
+
+    .invite-datecol .big {
+        font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+        font-weight: 900;
+        font-size: clamp(96px, 14vw, 170px);
+        letter-spacing: -0.02em;
+        line-height: 1.10;
+        color: #7f0f23;
+        margin: 0;
+        padding: 0;
+    }
+
+    .invite-datecol :is(h1,h2,h3,h4,p) {
+        margin: 0;
+    }
+
+/* little hint */
+.tap-hint {
+    position: absolute;
+    left: 18px;
+    bottom: 14px;
+    font-size: 12px;
+    color: rgba(35,23,19,0.62);
+    background: rgba(255,255,255,0.65);
+    border: 1px solid rgba(35,23,19,0.14);
+    padding: 8px 12px;
+    border-radius: 999px;
+}
+
+/* -----------------------------
+   Back face: “envelope / letter”
+----------------------------- */
+.invite-paper.invite-paper-back {
+    grid-template-columns: 1fr;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid rgba(35, 23, 19, 0.14);
+    /* Controls */
+    --apex: 58%;
+    --seal-size: 120px;
+    --seal-nudge: 0px;
+    --ray-right: 54deg;
+    --ray-left: 306deg;
+    background: radial-gradient(900px 520px at 50% 22%, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.86) 55%, rgba(0,0,0,0.045) 100%), linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.80));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.70), inset 0 -18px 26px rgba(0,0,0,0.05);
+    --seal-hand-size: 86px;
+    --seal-hand-nudge-x: 50px;
+    --seal-hand-nudge-y: 15px;
+    --seal-hand-rotate: -10deg;
+    --seal-hand-float: 8px;
+    --seal-hand-opacity: 1;
+}
+
+    /* Ultra-subtle paper grain */
+    .invite-paper.invite-paper-back::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(0deg, rgba(35,23,19,0.010) 0px, rgba(35,23,19,0.010) 1px, transparent 8px, transparent 16px), repeating-linear-gradient(90deg, rgba(35,23,19,0.008) 0px, rgba(35,23,19,0.008) 1px, transparent 10px, transparent 20px);
+        opacity: 0.10;
+        mix-blend-mode: multiply;
+    }
+
+    /* Crisp V crease */
+    .invite-paper.invite-paper-back::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(1100px 520px at 50% 10%, rgba(0,0,0,0.055) 0%, rgba(0,0,0,0.000) 60%), conic-gradient( from 0deg at 50% var(--apex), transparent 0deg, transparent calc(var(--ray-right) - 0.55deg), rgba(35,23,19,0.22) var(--ray-right), transparent calc(var(--ray-right) + 0.55deg), transparent calc(var(--ray-left) - 0.55deg), rgba(35,23,19,0.22) var(--ray-left), transparent calc(var(--ray-left) + 0.55deg), transparent 360deg ), conic-gradient( from 0deg at 50% var(--apex), transparent 0deg, transparent calc(var(--ray-right) - 1.35deg), rgba(255,255,255,0.60) calc(var(--ray-right) - 0.85deg), transparent calc(var(--ray-right) - 0.20deg), transparent calc(var(--ray-left) + 0.20deg), rgba(255,255,255,0.60) calc(var(--ray-left) + 0.85deg), transparent calc(var(--ray-left) + 1.35deg), transparent 360deg );
+        opacity: 0.95;
+        clip-path: polygon(0% 0%, 100% 0%, 50% var(--apex));
+    }
+
+/* Seal area: anchored to the apex */
+.seal-area {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--apex) + var(--seal-nudge));
+    transform: translateX(-50%);
+    z-index: 1;
+    width: min(420px, 92%);
+    display: block;
+    padding-top: 0;
+}
+
+    /* Seal itself */
+    .seal-area .wax-seal {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translate3d(-50%, -50%, 0) translateY(0) scale(1);
+        transform-origin: 50% 50%;
+        will-change: transform, filter;
+        width: var(--seal-size);
+        height: var(--seal-size);
+        border: 0;
+        padding: 0;
+        background-color: transparent;
+        transition: transform 140ms var(--ease), filter 140ms var(--ease);
+        z-index: 1;
+    }
+
+/* Click-hand indicator */
+.seal-hand {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: var(--seal-hand-size, 86px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+    z-index: 3;
+    opacity: var(--seal-hand-opacity, 1);
+    background-image: url("./assets/drawings/click_hand.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    --_hand-x: var(--seal-hand-nudge-x, 50px);
+    --_hand-y: var(--seal-hand-nudge-y, -44px);
+    --_hand-rot: var(--seal-hand-rotate, -10deg);
+    --_hand-float: var(--seal-hand-float, 8px);
+    transform: translate3d(-50%, -50%, 0) translate(var(--_hand-x), var(--_hand-y)) rotate(var(--_hand-rot));
+    filter: drop-shadow(0 14px 18px rgba(0,0,0,0.22)) drop-shadow(0 6px 8px rgba(0,0,0,0.16));
+    animation: sealHandFloat 1.65s ease-in-out infinite;
+}
+
+@keyframes sealHandFloat {
+    0%, 100% {
+        transform: translate3d(-50%, -50%, 0) translate(var(--_hand-x), var(--_hand-y)) rotate(var(--_hand-rot));
+    }
+
+    50% {
+        transform: translate3d(-50%, -50%, 0) translate(var(--_hand-x), calc(var(--_hand-y) + var(--_hand-float))) rotate(var(--_hand-rot));
+    }
+}
+
+.seal-area .wax-seal:hover {
+    transform: translate3d(-50%, -50%, 0) translateY(-1px) scale(1.03);
+    filter: drop-shadow(0 20px 24px rgba(0,0,0,0.24)) drop-shadow(0 8px 10px rgba(0,0,0,0.18)) saturate(1.06) contrast(1.03);
+}
+
+.seal-area .wax-seal:active {
+    transform: translate3d(-50%, -50%, 0) translateY(0) scale(0.985);
+}
+
+.seal-area .wax-seal:focus-visible {
+    outline: 3px solid rgba(157,18,43,0.35);
+    outline-offset: 6px;
+}
+
+/* Mobile tuning */
+@media (max-width: 560px) {
+    .seal-hand {
+        width: var(--seal-hand-size, 78px);
+        --_hand-x: var(--seal-hand-nudge-x, 42px);
+        --_hand-y: var(--seal-hand-nudge-y, -40px);
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .seal-hand {
+        animation: none !important;
+    }
+
+    .seal-alt {
+        transition: none !important;
+    }
+}
+
+/* ===== Wax Seal (SVG-based, NO white circle) ===== */
+.wax-seal {
+    --seal-size: 128px;
+    width: var(--seal-size);
+    height: var(--seal-size);
+    padding: 0;
+    border: 0;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border-radius: 0;
+    cursor: pointer;
+    background-image: url("./assets/drawings/red_wax_seal.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 18px 22px rgba(0,0,0,0.22)) drop-shadow(0 6px 8px rgba(0,0,0,0.16));
+    transition: filter 140ms var(--ease);
+}
+
+    /* If any older wax-seal pseudo layers exist, nuke them */
+    .wax-seal::before,
+    .wax-seal::after {
+        content: none !important;
+        display: none !important;
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    .wax-seal {
+        transition: none !important;
+    }
+
+    .seal-area .wax-seal {
+        transition: none !important;
+    }
+}
