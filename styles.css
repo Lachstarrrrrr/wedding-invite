@@ -1147,27 +1147,6 @@ code {
     transform: rotate(var(--right-rot));
 }
 
-/* Responsive tweak for narrow phones */
-@media (max-width: 520px) {
-    .childhood-section {
-        padding: 48px 14px;
-    }
-
-    /* If the SVG compresses oddly on very small widths,
-     you can slightly change placement here. */
-    .childhood-stage {
-        --left-x: 18.5%;
-        --left-y: 16.5%;
-        --left-w: 26%;
-        --left-h: 31.5%;
-        --left-rot: -1deg;
-        --right-x: 58%;
-        --right-y: 15.5%;
-        --right-w: 24%;
-        --right-h: 32%;
-        --right-rot: -5deg;
-    }
-}
 
 /* -----------------------------
    Family Details (invitation-style like reference)
