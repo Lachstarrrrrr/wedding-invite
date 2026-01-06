@@ -1008,6 +1008,45 @@ code {
     background: #fff;
 }
 
+/* Us now (full-bleed) */
+.us-now-section {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: #ffffff;
+    padding: 56px 0 0;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --us-photo: url("./assets/photos/05.JPG");
+}
+
+.us-now-header {
+    width: min(1100px, calc(100% - 36px));
+    margin: 0 auto 24px;
+    text-align: center;
+}
+
+.us-now-bg {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    height: clamp(520px, 85vh, 980px);
+    background-image: var(--us-photo);
+    background-size: cover;
+    background-position: center;
+    filter: saturate(1.02) contrast(1.02);
+}
+
+.us-now-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 55%);
+}
+
+
 
 .childhood-inner {
     width: min(1100px, 100%);
