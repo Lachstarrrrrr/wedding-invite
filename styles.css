@@ -279,7 +279,7 @@ code {
 ----------------------------- */
 .hero {
     /* Change this ONE value to swap the hero photo */
-    --hero-photo: url("./assets/photos/01.jpg");
+    --hero-photo: url("./assets/photos/01.JPG");
     position: relative;
     min-height: 100vh;
     padding-top: var(--topbar-h);
@@ -897,7 +897,7 @@ code {
     align-items: end;
     background: #000;
     isolation: isolate;
-    --sd-photo: url("./assets/photos/01.jpg");
+    --sd-photo: url("./assets/photos/01.JPG");
     --sd-photo-pos: center;
 }
 
@@ -2763,7 +2763,7 @@ code {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background-image: var(--tl-photo, url("./assets/photos/05.jpg"));
+    background-image: var(--tl-photo, url("./assets/photos/05.JPG"));
     background-size: cover;
     background-position: var(--tl-photo-pos, center);
     transform: scale(1.01);
