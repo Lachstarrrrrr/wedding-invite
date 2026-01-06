@@ -22,25 +22,25 @@
     const WEDDING_DATE_ISO = "2026-01-24T10:30:00+07:00";
 
     const ALBUM_FILM_IMAGES = [
-        "./assets/photos/Aus Photos/IMG_0380.JPG",
-        "./assets/photos/Edited Photos/RIC_0001.jpg",
-        "./assets/photos/Edited Photos/RIC_0138.jpg",
-        "./assets/photos/Edited Photos/RIC_9354.jpg",
-        "./assets/photos/Edited Photos/RIC_9806.jpg",
-        "./assets/photos/Edited Photos/RIC_9287.jpg",
+        "./assets/photos/Aus%20Photos/IMG_0380.JPG",
+        "./assets/photos/Edited%20Photos/RIC_0001.jpg",
+        "./assets/photos/Edited%20Photos/RIC_0138.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9354.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9806.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9287.jpg",
     ];
 
     const GALLERY_IMAGES = [
-        "./assets/photos/Edited Photos/RIC_0769.jpg",
-        "./assets/photos/Edited Photos/RIC_0386.jpg",
-        "./assets/photos/Edited Photos/RIC_9296.jpg",
-        "./assets/photos/Edited Photos/RIC_9755.jpg",
-        "./assets/photos/Edited Photos/RIC_9377.jpg",
-        "./assets/photos/Edited Photos/RIC_0494.jpg",
-        "./assets/photos/Edited Photos/RIC_0637.jpg",
-        "./assets/photos/Edited Photos/RIC_9727.jpg",
-        "./assets/photos/Edited Photos/RIC_9738.jpg",
-        "./assets/photos/Edited Photos/RIC_9890.jpg",
+        "./assets/photos/Edited%20Photos/RIC_0769.jpg",
+        "./assets/photos/Edited%20Photos/RIC_0386.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9296.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9755.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9377.jpg",
+        "./assets/photos/Edited%20Photos/RIC_0494.jpg",
+        "./assets/photos/Edited%20Photos/RIC_0637.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9727.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9738.jpg",
+        "./assets/photos/Edited%20Photos/RIC_9890.jpg",
     ];
 
     const DRESS_DOT_COLORS = ["#fbf3e8", "#231713", "#ffffff"];
