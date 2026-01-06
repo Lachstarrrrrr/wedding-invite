@@ -1713,7 +1713,7 @@ code {
         --stage-h: clamp(420px, calc(var(--stage-w) * var(--stage-aspect)), 640px);
         /* Scale elements down */
         --photo-w: clamp(190px, calc(var(--stage-w) * 0.52), 290px);
-        --text-w: clamp(160px, calc(var(--stage-w) * 0.40), 260px);
+        --text-w: clamp(150px, calc(var(--stage-w) * 0.34), 230px);
         /* Re-tune positions slightly so nothing feels “off-screen” */
         --p1-x: 0.010;
         --p1-y: 0.000;
@@ -1722,9 +1722,9 @@ code {
         --p2-y: 0.020;
         --p2-rot: 6deg;
         --t1-x: 0.000;
-        --t1-y: 0.120;
+        --t1-y: 0.180;
         --t2-x: 0.000;
-        --t2-y: -0.120;
+        --t2-y: -0.180;
         height: var(--stage-h);
     }
 
@@ -1778,9 +1778,9 @@ code {
         --stage-aspect: 1.12;
         --stage-h: clamp(400px, calc(var(--stage-w) * var(--stage-aspect)), 600px);
         --photo-w: clamp(170px, calc(var(--stage-w) * 0.54), 260px);
-        --text-w: clamp(150px, calc(var(--stage-w) * 0.40), 240px);
-        --t1-y: 0.105;
-        --t2-y: -0.105;
+        --text-w: clamp(140px, calc(var(--stage-w) * 0.34), 220px);
+        --t1-y: 0.165;
+        --t2-y: -0.165;
     }
 }
 
