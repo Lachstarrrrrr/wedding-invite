@@ -166,18 +166,10 @@
     // =========================================================
     const state = {
         entered: PERSIST_ENTERED ? getLS(LS.entered, "0") === "1" : false,
-        lang: (() => {
-            const saved = getLS(LS.lang, "");
-            return saved === "en" || saved === "vi" ? saved : "vi";
-        })(),
+        lang: "vi",
         musicOn: getLS(LS.music, "0") === "1",
         galleryIndex: 0,
     };
-
-    if (!state.entered) {
-        state.lang = "vi";
-        setLS(LS.lang, "vi");
-    }
 
     // =========================================================
     // i18n DICTIONARY (UNCHANGED)
@@ -467,7 +459,7 @@
             "status.copyFailed": "Copy failed.",
             "status.musicOn": "Music: On",
             "status.musicOff": "Music: Off",
-            "status.langVI": "Ngn ng?: VI",
+            "status.langVI": "Ngôn ngữ: VI",
             "status.langEN": "Language: EN",
             "status.entered": "Invitation opened.",
             "status.flipped": "Invitation flipped.",
@@ -566,7 +558,7 @@
     const updateLangButtonUI = () => {
         if (!els.langToggle) return;
         const label = state.lang === "vi" ? t("status.langVI") : t("status.langEN");
-        els.langToggle.textContent = label || (state.lang === "vi" ? "Ngn ng?: VI" : "Language: EN");
+        els.langToggle.textContent = label || (state.lang === "vi" ? "Ngôn ngữ: VI" : "Language: EN");
         els.langToggle.setAttribute("aria-pressed", state.lang === "vi" ? "true" : "false");
     };
 
@@ -1261,7 +1253,6 @@
         if (!els.langToggle) return;
         els.langToggle.addEventListener("click", () => {
             state.lang = state.lang === "vi" ? "en" : "vi";
-            setLS(LS.lang, state.lang);
             applyLanguage();
             // after language swap, re-check bride/groom alts too
             fixBrideGroomSwapped();
@@ -1362,7 +1353,6 @@
     // =========================================================
     const init = () => {
         state.lang = "vi";
-        setLS(LS.lang, "vi");
         applyLanguage();
         updateMusicButtonUI(false);
         updateLangButtonUI();
@@ -1412,7 +1402,6 @@
         resetEnter: () => removeLS(LS.entered),
         setLang: (l) => {
             state.lang = l === "en" ? "en" : "vi";
-            setLS(LS.lang, state.lang);
             applyLanguage();
             fixBrideGroomSwapped();
         },
