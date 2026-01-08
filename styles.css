@@ -1557,53 +1557,30 @@ code {
    ========================================================= */
 .story-polaroid-collage {
     width: min(760px, 100%);
-    position: relative;
     margin: 0 auto;
-    /* ----- STAGE SIZE (scales proportionally) ----- */
-    --stage-w: min(760px, calc(100vw - 44px));
-    --stage-aspect: 1.13; /* height = width * aspect */
-    --stage-h: clamp(520px, calc(var(--stage-w) * var(--stage-aspect)), 860px);
-    /* ----- SIZES (scale with stage width) ----- */
-    --photo-w: clamp(240px, calc(var(--stage-w) * 0.52), 390px);
-    --text-w: clamp(210px, calc(var(--stage-w) * 0.42), 360px);
-    /* ----- MANUAL POSITIONS (EDIT THESE) ----- */
-    /* Use ratios:
-       X is relative to stage width  (0.01 = 1% of stage width)
-       Y is relative to stage height (0.01 = 1% of stage height)
-    */
-    /* Top-left photo (bride photo) */
-    --p1-x: 0.013; /* ~10px at 760px wide */
-    --p1-y: 0.000;
-    --p1-rot: -6deg;
-    --p1-w: var(--p1-w-override, var(--photo-w));
-    /* Bottom-right photo (groom photo) */
-    --p2-x: 0.026; /* ~20px at 760px wide */
-    --p2-y: 0.030; /* ~20px when stage-h ~680px */
-    --p2-rot: 6deg;
-    --p2-w: var(--p2-w-override, var(--photo-w));
-    /* Top-right text (bride text) */
-    --t1-x: 0.000;
-    --t1-y: 0.140;
-    /* Bottom-left text (groom text) */
-    --t2-x: 0.000;
-    --t2-y: -0.140;
-    /* ----- DEPTH CONTROL ----- */
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    grid-template-areas:
+        "bride-photo bride-text"
+        "groom-text groom-photo";
+    align-items: center;
+    justify-items: center;
+    gap: var(--grid-gap);
+    --grid-gap: clamp(14px, 3vw, 28px);
+    --photo-w: clamp(220px, 28vw, 320px);
+    --text-w: clamp(200px, 26vw, 320px);
     --z-text: 2;
     --z-photo: 4;
-    /* ----- DERIVED (DON'T EDIT) ----- */
-    --p1-x-final: var(--p1-x-override, var(--p1-x));
-    --p1-y-final: var(--p1-y-override, var(--p1-y));
-    --p2-x-final: var(--p2-x-override, var(--p2-x));
-    --p2-y-final: var(--p2-y-override, var(--p2-y));
-    --p1-tx: calc(var(--stage-w) * var(--p1-x-final));
-    --p1-ty: calc(var(--stage-h) * var(--p1-y-final));
-    --p2-tx: calc(var(--stage-w) * var(--p2-x-final));
-    --p2-ty: calc(var(--stage-h) * var(--p2-y-final));
-    --t1-tx: calc(var(--stage-w) * var(--t1-x));
-    --t1-ty: calc(var(--stage-h) * var(--t1-y));
-    --t2-tx: calc(var(--stage-w) * var(--t2-x));
-    --t2-ty: calc(var(--stage-h) * var(--t2-y));
-    height: var(--stage-h);
+    --p1-rot: -2deg;
+    --p2-rot: 2deg;
+    --photo-nudge: clamp(24px, 4.8vw, 46px);
+    --p1-w: var(--p1-w-override, var(--photo-w));
+    --p2-w: var(--p2-w-override, var(--photo-w));
+    --p1-nudge-x: var(--p1-nudge-x-override, var(--photo-nudge));
+    --p1-nudge-y: var(--p1-nudge-y-override, var(--photo-nudge));
+    --p2-nudge-x: var(--p2-nudge-x-override, calc(var(--photo-nudge) * -1));
+    --p2-nudge-y: var(--p2-nudge-y-override, calc(var(--photo-nudge) * -1));
 }
 
 /* ---- Polaroid frames: SQUARE corners ---- */
@@ -1632,23 +1609,25 @@ code {
 
 /* TOP-LEFT PHOTO (dynamic XY) */
 .polaroid-bride-photo {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: var(--p1-w);
-    transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
+    grid-area: bride-photo;
+    position: relative;
+    width: min(100%, var(--p1-w));
+    transform: translate3d(var(--p1-nudge-x), var(--p1-nudge-y), 0) rotate(var(--p1-rot));
     transform-origin: 50% 50%;
+    justify-self: end;
+    align-self: end;
     z-index: var(--z-photo);
 }
 
 /* BOTTOM-RIGHT PHOTO (dynamic XY) */
 .polaroid-groom-photo {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: var(--p2-w);
-    transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
+    grid-area: groom-photo;
+    position: relative;
+    width: min(100%, var(--p2-w));
+    transform: translate3d(var(--p2-nudge-x), var(--p2-nudge-y), 0) rotate(var(--p2-rot));
     transform-origin: 50% 50%;
+    justify-self: start;
+    align-self: start;
     z-index: var(--z-photo);
 }
 
@@ -1659,7 +1638,7 @@ code {
     box-shadow: none !important;
     border-radius: 0 !important;
     padding: 0 !important;
-    width: var(--text-w);
+    width: min(100%, var(--text-w));
     max-width: 360px;
     text-align: center;
     z-index: var(--z-text);
@@ -1698,128 +1677,57 @@ code {
 
 /* TOP-RIGHT TEXT (dynamic XY) */
 .story-info-bride {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: var(--text-w);
-    transform: translate3d(var(--t1-tx), var(--t1-ty), 0);
-    z-index: var(--z-text);
+    grid-area: bride-text;
+    position: relative;
+    width: min(100%, var(--text-w));
+    justify-self: start;
+    align-self: center;
+    padding-left: clamp(6px, 1.4vw, 14px);
 }
 
 /* BOTTOM-LEFT TEXT (dynamic XY) */
 .story-info-groom {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: var(--text-w);
-    transform: translate3d(var(--t2-tx), var(--t2-ty), 0);
-    z-index: var(--z-text);
+    grid-area: groom-text;
+    position: relative;
+    width: min(100%, var(--text-w));
+    justify-self: end;
+    align-self: center;
+    padding-right: clamp(6px, 1.4vw, 14px);
 }
 
 /* Mobile: KEEP the angled collage (no stacking) */
 @media (max-width: 720px) {
     .story-polaroid-collage {
-        /* keep absolute overlap layout */
-        width: min(760px, 100%);
-        position: relative;
-        /* Make the stage a bit shorter + tighter on phones */
-        --stage-w: min(640px, calc(100vw - 24px));
-        --stage-aspect: 1.08;
-        --stage-h: clamp(420px, calc(var(--stage-w) * var(--stage-aspect)), 640px);
-        /* Scale elements down */
-        --photo-w: clamp(100px, calc(var(--stage-w) * 0.52), 290px);
-        --text-w: clamp(150px, calc(var(--stage-w) * 0.34), 230px);
-        /* Re-tune positions slightly so nothing feels “off-screen” */
-        --p1-x: 0.010;
-        --p1-y: 0.000;
-        --p1-rot: -6deg;
-        --p1-w-override: var(--p1-w-override-mobile, var(--p1-w-override, var(--photo-w)));
+        --grid-gap: clamp(10px, 3vw, 18px);
+        --photo-w: clamp(160px, 44vw, 230px);
+        --text-w: clamp(150px, 40vw, 220px);
+        --photo-nudge: clamp(18px, 5.2vw, 38px);
+        --p1-w: var(--p1-w-override-mobile, var(--photo-w));
+        --p2-w: var(--p2-w-override-mobile, var(--photo-w));
+        --p1-nudge-x: var(--p1-nudge-x-mobile, var(--photo-nudge));
+        --p1-nudge-y: var(--p1-nudge-y-mobile, var(--photo-nudge));
+        --p2-nudge-x: var(--p2-nudge-x-mobile, calc(var(--photo-nudge) * -1));
+        --p2-nudge-y: var(--p2-nudge-y-mobile, calc(var(--photo-nudge) * -1));
         --p1-w-override-mobile: 200px;
-        --p2-x: 0.012;
-        --p2-y: 0.020;
-        --p2-rot: 6deg;
-        --p2-w-override: var(--p2-w-override-mobile, var(--p2-w-override, var(--photo-w)));
         --p2-w-override-mobile: 200px;
-        --t1-x: 0.000;
-        --t1-y: 0.180;
-        --t2-x: 0.000;
-        --t2-y: -0.140;
-        --p1-x-override-mobile: -0.05;
-        --p1-y-override-mobile: -0.05;
-        --p2-x-override-mobile: 0.05;
-        --p2-y-override-mobile: 0.1;
-        --p1-x-override: var(--p1-x-override-mobile, var(--p1-x-override));
-        --p1-y-override: var(--p1-y-override-mobile, var(--p1-y-override));
-        --p2-x-override: var(--p2-x-override-mobile, var(--p2-x-override));
-        --p2-y-override: var(--p2-y-override-mobile, var(--p2-y-override));
-        height: var(--stage-h);
-    }
-
-    /* Keep your absolute/angled elements active on mobile */
-    .polaroid-bride-photo,
-    .polaroid-groom-photo,
-    .story-info-bride,
-    .story-info-groom {
-        position: absolute;
-        transform: none; /* base reset — the per-element rules below apply */
-    }
-
-    /* Re-apply the transforms explicitly (so nothing gets “unset” by other rules) */
-    .polaroid-bride-photo {
-        left: 0;
-        top: 0;
-        width: var(--p1-w);
-        transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
-        z-index: var(--z-photo);
-    }
-
-    .polaroid-groom-photo {
-        right: 0;
-        bottom: 0;
-        width: var(--p2-w);
-        transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
-        z-index: var(--z-photo);
-    }
-
-    .story-info-bride {
-        right: 0;
-        top: 0;
-        width: var(--text-w);
-        transform: translate3d(var(--t1-tx), var(--t1-ty), 0);
-        z-index: var(--z-text);
-    }
-
-    .story-info-groom {
-        left: 0;
-        bottom: 0;
-        width: var(--text-w);
-        transform: translate3d(var(--t2-tx), var(--t2-ty), 0);
-        z-index: var(--z-text);
     }
 }
 
 /* Extra-small phones: still keep overlap, just tighter */
 @media (max-width: 420px) {
     .story-polaroid-collage {
-        --stage-w: calc(100vw - 18px);
-        --stage-aspect: 1.12;
-        --stage-h: clamp(400px, calc(var(--stage-w) * var(--stage-aspect)), 600px);
-        --photo-w: clamp(170px, calc(var(--stage-w) * 0.54), 260px);
-        --text-w: clamp(140px, calc(var(--stage-w) * 0.34), 220px);
-        --t1-y: 0.165;
-        --t2-y: -0.135;
+        --grid-gap: clamp(8px, 3vw, 14px);
+        --photo-w: clamp(140px, 48vw, 210px);
+        --text-w: clamp(140px, 42vw, 210px);
+        --photo-nudge: clamp(14px, 5.6vw, 32px);
+        --p1-w: var(--p1-w-override-xs, var(--photo-w));
+        --p2-w: var(--p2-w-override-xs, var(--photo-w));
+        --p1-nudge-x: var(--p1-nudge-x-xs, var(--photo-nudge));
+        --p1-nudge-y: var(--p1-nudge-y-xs, var(--photo-nudge));
+        --p2-nudge-x: var(--p2-nudge-x-xs, calc(var(--photo-nudge) * -1));
+        --p2-nudge-y: var(--p2-nudge-y-xs, calc(var(--photo-nudge) * -1));
         --p1-w-override-xs: 180px;
         --p2-w-override-xs: 180px;
-        --p1-x-override-mobile: 0.03;
-        --p1-y-override-mobile: 0.02;
-        --p2-x-override-mobile: 0.00;
-        --p2-y-override-mobile: 0.06;
-        --p1-w-override: var(--p1-w-override-xs, var(--p1-w-override-mobile, var(--p1-w-override, var(--photo-w))));
-        --p2-w-override: var(--p2-w-override-xs, var(--p2-w-override-mobile, var(--p2-w-override, var(--photo-w))));
-        --p1-x-override: var(--p1-x-override-xs, var(--p1-x-override-mobile, var(--p1-x-override)));
-        --p1-y-override: var(--p1-y-override-xs, var(--p1-y-override-mobile, var(--p1-y-override)));
-        --p2-x-override: var(--p2-x-override-xs, var(--p2-x-override-mobile, var(--p2-x-override)));
-        --p2-y-override: var(--p2-y-override-xs, var(--p2-y-override-mobile, var(--p2-y-override)));
     }
 }
 

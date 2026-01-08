@@ -179,8 +179,8 @@
     // =========================================================
     const I18N = /* pasted as-is from your file */ {
         vi: {
-            "doc.title": "Thùy Phương & Mitchell Lachlan - Thiệp cưới",
-            "doc.description": "Thiệp mời cưới của Thùy Phương và Mitchell Lachlan - 24/01/2026",
+            "doc.title": "Thúy Phương & Mitchell Lachlan - Thiệp cưới",
+            "doc.description": "Thiệp mời cưới của Thúy Phương và Mitchell Lachlan - 24/01/2026",
             "overlay.openInvitation": "Mở thiệp mời",
             "overlay.flipInvitation": "Lật thiệp mời",
             "overlay.save": "SAVE",
@@ -326,8 +326,8 @@
             "status.rsvpFailed": "Gửi thất bại. Vui lòng thử lại.",
         },
         en: {
-            "doc.title": "Thùy Phương & Mitchell Lachlan - Wedding Invitation",
-            "doc.description": "Wedding invitation for Thùy Phương and Mitchell Lachlan - 24/01/2026",
+            "doc.title": "Thúy Phương & Mitchell Lachlan - Wedding Invitation",
+            "doc.description": "Wedding invitation for Thúy Phương and Mitchell Lachlan - 24/01/2026",
             "overlay.openInvitation": "Open invitation",
             "overlay.flipInvitation": "Flip invitation",
             "overlay.save": "SAVE",
