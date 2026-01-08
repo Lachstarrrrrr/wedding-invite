@@ -1361,6 +1361,8 @@
     // INIT
     // =========================================================
     const init = () => {
+        state.lang = "vi";
+        setLS(LS.lang, "vi");
         applyLanguage();
         updateMusicButtonUI(false);
         updateLangButtonUI();
