@@ -2325,7 +2325,7 @@ code {
     width: var(--sub-w);
     height: clamp(170px, 26vw, 240px);
     transform: translate3d(var(--sub-tx), var(--sub-ty), 0) rotate(var(--sub-rot));
-    z-index: 6;
+    z-index: 9;
 }
 
 /* Mobile: KEEP the angled collage (no stacking) */
@@ -2384,8 +2384,8 @@ code {
         /* keep the bottom photo overlapping the top photo on phones */
         --small-y: 0.20;
         /* FIX: keep "OF LOVE" inside the viewport on phones */
-        --sub-x: 0.72;
-        --sub-y: 0.47;
+        --sub-x: 0.58;
+        --sub-y: 0.44;
         /* rotation stays from your desktop vars */
     }
 
@@ -2444,8 +2444,8 @@ code {
         --main-x: var(--main-x-mobile, 0.44);
         --main-y: var(--main-y-mobile, -0.01);
         /* ✅ tighter phones: pull it a bit further left */
-        --sub-x: 0.64;
-        --sub-y: 0.47;
+        --sub-x: 0.54;
+        --sub-y: 0.44;
     }
 }
 
