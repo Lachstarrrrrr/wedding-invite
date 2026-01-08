@@ -1063,7 +1063,7 @@ code {
     font-family: "Playwrite VN", "Great Vibes", cursive;
     font-weight: 400;
     font-size: clamp(34px, 5vw, 56px);
-    line-height: 1.05;
+    line-height: 2.1;
 }
 
 .childhood-subtitle {
@@ -1566,10 +1566,12 @@ code {
     --p1-x: 0.013; /* ~10px at 760px wide */
     --p1-y: 0.000;
     --p1-rot: -6deg;
+    --p1-w: var(--p1-w-override, var(--photo-w));
     /* Bottom-right photo (groom photo) */
     --p2-x: 0.026; /* ~20px at 760px wide */
     --p2-y: 0.030; /* ~20px when stage-h ~680px */
     --p2-rot: 6deg;
+    --p2-w: var(--p2-w-override, var(--photo-w));
     /* Top-right text (bride text) */
     --t1-x: 0.000;
     --t1-y: 0.140;
@@ -1580,10 +1582,14 @@ code {
     --z-text: 2;
     --z-photo: 4;
     /* ----- DERIVED (DON'T EDIT) ----- */
-    --p1-tx: calc(var(--stage-w) * var(--p1-x));
-    --p1-ty: calc(var(--stage-h) * var(--p1-y));
-    --p2-tx: calc(var(--stage-w) * var(--p2-x));
-    --p2-ty: calc(var(--stage-h) * var(--p2-y));
+    --p1-x-final: var(--p1-x-override, var(--p1-x));
+    --p1-y-final: var(--p1-y-override, var(--p1-y));
+    --p2-x-final: var(--p2-x-override, var(--p2-x));
+    --p2-y-final: var(--p2-y-override, var(--p2-y));
+    --p1-tx: calc(var(--stage-w) * var(--p1-x-final));
+    --p1-ty: calc(var(--stage-h) * var(--p1-y-final));
+    --p2-tx: calc(var(--stage-w) * var(--p2-x-final));
+    --p2-ty: calc(var(--stage-h) * var(--p2-y-final));
     --t1-tx: calc(var(--stage-w) * var(--t1-x));
     --t1-ty: calc(var(--stage-h) * var(--t1-y));
     --t2-tx: calc(var(--stage-w) * var(--t2-x));
@@ -1620,7 +1626,7 @@ code {
     position: absolute;
     left: 0;
     top: 0;
-    width: var(--photo-w);
+    width: var(--p1-w);
     transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
     transform-origin: 50% 50%;
     z-index: var(--z-photo);
@@ -1631,7 +1637,7 @@ code {
     position: absolute;
     right: 0;
     bottom: 0;
-    width: var(--photo-w);
+    width: var(--p2-w);
     transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
     transform-origin: 50% 50%;
     z-index: var(--z-photo);
@@ -1712,19 +1718,31 @@ code {
         --stage-aspect: 1.08;
         --stage-h: clamp(420px, calc(var(--stage-w) * var(--stage-aspect)), 640px);
         /* Scale elements down */
-        --photo-w: clamp(190px, calc(var(--stage-w) * 0.52), 290px);
+        --photo-w: clamp(100px, calc(var(--stage-w) * 0.52), 290px);
         --text-w: clamp(150px, calc(var(--stage-w) * 0.34), 230px);
         /* Re-tune positions slightly so nothing feels “off-screen” */
         --p1-x: 0.010;
         --p1-y: 0.000;
         --p1-rot: -6deg;
+        --p1-w-override: var(--p1-w-override-mobile, var(--p1-w-override, var(--photo-w)));
+        --p1-w-override-mobile: 200px;
         --p2-x: 0.012;
         --p2-y: 0.020;
         --p2-rot: 6deg;
+        --p2-w-override: var(--p2-w-override-mobile, var(--p2-w-override, var(--photo-w)));
+        --p2-w-override-mobile: 200px;
         --t1-x: 0.000;
         --t1-y: 0.180;
         --t2-x: 0.000;
-        --t2-y: -0.180;
+        --t2-y: -0.140;
+        --p1-x-override-mobile: -0.05;
+        --p1-y-override-mobile: -0.05;
+        --p2-x-override-mobile: 0.05;
+        --p2-y-override-mobile: 0.1;
+        --p1-x-override: var(--p1-x-override-mobile, var(--p1-x-override));
+        --p1-y-override: var(--p1-y-override-mobile, var(--p1-y-override));
+        --p2-x-override: var(--p2-x-override-mobile, var(--p2-x-override));
+        --p2-y-override: var(--p2-y-override-mobile, var(--p2-y-override));
         height: var(--stage-h);
     }
 
@@ -1741,7 +1759,7 @@ code {
     .polaroid-bride-photo {
         left: 0;
         top: 0;
-        width: var(--photo-w);
+        width: var(--p1-w);
         transform: translate3d(var(--p1-tx), var(--p1-ty), 0) rotate(var(--p1-rot));
         z-index: var(--z-photo);
     }
@@ -1749,7 +1767,7 @@ code {
     .polaroid-groom-photo {
         right: 0;
         bottom: 0;
-        width: var(--photo-w);
+        width: var(--p2-w);
         transform: translate3d(var(--p2-tx), var(--p2-ty), 0) rotate(var(--p2-rot));
         z-index: var(--z-photo);
     }
@@ -1780,7 +1798,19 @@ code {
         --photo-w: clamp(170px, calc(var(--stage-w) * 0.54), 260px);
         --text-w: clamp(140px, calc(var(--stage-w) * 0.34), 220px);
         --t1-y: 0.165;
-        --t2-y: -0.165;
+        --t2-y: -0.135;
+        --p1-w-override-xs: 180px;
+        --p2-w-override-xs: 180px;
+        --p1-x-override-mobile: 0.03;
+        --p1-y-override-mobile: 0.02;
+        --p2-x-override-mobile: 0.00;
+        --p2-y-override-mobile: 0.06;
+        --p1-w-override: var(--p1-w-override-xs, var(--p1-w-override-mobile, var(--p1-w-override, var(--photo-w))));
+        --p2-w-override: var(--p2-w-override-xs, var(--p2-w-override-mobile, var(--p2-w-override, var(--photo-w))));
+        --p1-x-override: var(--p1-x-override-xs, var(--p1-x-override-mobile, var(--p1-x-override)));
+        --p1-y-override: var(--p1-y-override-xs, var(--p1-y-override-mobile, var(--p1-y-override)));
+        --p2-x-override: var(--p2-x-override-xs, var(--p2-x-override-mobile, var(--p2-x-override)));
+        --p2-y-override: var(--p2-y-override-xs, var(--p2-y-override-mobile, var(--p2-y-override)));
     }
 }
 
@@ -2429,9 +2459,11 @@ code {
         height: var(--stage-h);
         min-height: var(--stage-min-h);
         --title-w: clamp(190px, calc(var(--stage-w) * 0.40), 300px);
-        --main-w: clamp(220px, calc(var(--stage-w) * 0.52), 340px);
+        --main-w: var(--main-w-mobile, clamp(210px, calc(var(--stage-w) * 0.48), 320px));
         --small-w: clamp(230px, calc(var(--stage-w) * 0.56), 360px);
         --sub-w: clamp(180px, calc(var(--stage-w) * 0.36), 280px);
+        --main-x: var(--main-x-mobile, 0.46);
+        --main-y: var(--main-y-mobile, -0.02);
         /* keep the bottom photo overlapping the top photo on phones */
         --small-y: 0.20;
         /* FIX: keep "OF LOVE" inside the viewport on phones */
@@ -2489,9 +2521,11 @@ code {
         --stage-min-h: 920px;
         --stage-aspect: 1.78;
         --title-w: clamp(180px, calc(var(--stage-w) * 0.42), 280px);
-        --main-w: clamp(210px, calc(var(--stage-w) * 0.54), 320px);
+        --main-w: var(--main-w-mobile, clamp(200px, calc(var(--stage-w) * 0.50), 300px));
         --small-w: clamp(220px, calc(var(--stage-w) * 0.60), 340px);
         --sub-w: clamp(170px, calc(var(--stage-w) * 0.36), 260px);
+        --main-x: var(--main-x-mobile, 0.44);
+        --main-y: var(--main-y-mobile, -0.01);
         /* ✅ tighter phones: pull it a bit further left */
         --sub-x: 0.64;
         --sub-y: 0.47;
@@ -2505,9 +2539,11 @@ code {
         --stage-min-h: 920px;
         --stage-aspect: 1.78;
         --title-w: clamp(180px, calc(var(--stage-w) * 0.42), 280px);
-        --main-w: clamp(210px, calc(var(--stage-w) * 0.54), 320px);
-        --small-w: clamp(220px, calc(var(--stage-w) * 0.60), 340px);
+        --main-w: var(--main-w-mobile, clamp(100px, calc(var(--stage-w) * 0.50), 300px));
+        --small-w: clamp(100px, calc(var(--stage-w) * 0.60), 340px);
         --sub-w: clamp(170px, calc(var(--stage-w) * 0.36), 260px);
+        --main-x: var(--main-x-mobile, 0.44);
+        --main-y: var(--main-y-mobile, -0.01);
         --small-y: 0.18;
     }
 }
@@ -4061,6 +4097,10 @@ code {
 
 /* Mobile tuning */
 @media (max-width: 560px) {
+    .invite-paper.invite-paper-back {
+        --seal-size: 96px;
+    }
+
     .invite-topline .save,
     .invite-topline .date {
         font-size: 14px;
