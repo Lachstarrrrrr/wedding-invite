@@ -2428,10 +2428,10 @@ code {
         --stage-h: clamp(var(--stage-min-h), calc(var(--stage-w) * var(--stage-aspect)), var(--stage-max-h));
         height: var(--stage-h);
         min-height: var(--stage-min-h);
-        --title-w: clamp(210px, calc(var(--stage-w) * 0.44), 320px);
-        --main-w: clamp(260px, calc(var(--stage-w) * 0.60), 380px);
-        --small-w: clamp(280px, calc(var(--stage-w) * 0.68), 420px);
-        --sub-w: clamp(190px, calc(var(--stage-w) * 0.38), 300px);
+        --title-w: clamp(190px, calc(var(--stage-w) * 0.40), 300px);
+        --main-w: clamp(220px, calc(var(--stage-w) * 0.52), 340px);
+        --small-w: clamp(230px, calc(var(--stage-w) * 0.56), 360px);
+        --sub-w: clamp(180px, calc(var(--stage-w) * 0.36), 280px);
         /* keep the bottom photo overlapping the top photo on phones */
         --small-y: 0.20;
         /* FIX: keep "OF LOVE" inside the viewport on phones */
@@ -2474,6 +2474,12 @@ code {
     .album-scrap {
         display: none;
     }
+
+    .album-flower {
+        right: var(--album-flower-right-mobile, -12px);
+        top: var(--album-flower-top-mobile, 640px);
+        width: var(--album-flower-width-mobile, 180px);
+    }
 }
 
 /* Extra-small phones */
@@ -2482,10 +2488,10 @@ code {
         --stage-w: calc(100vw - 18px);
         --stage-min-h: 920px;
         --stage-aspect: 1.78;
-        --title-w: clamp(200px, calc(var(--stage-w) * 0.46), 300px);
-        --main-w: clamp(250px, calc(var(--stage-w) * 0.62), 360px);
-        --small-w: clamp(260px, calc(var(--stage-w) * 0.72), 400px);
-        --sub-w: clamp(180px, calc(var(--stage-w) * 0.40), 280px);
+        --title-w: clamp(180px, calc(var(--stage-w) * 0.42), 280px);
+        --main-w: clamp(210px, calc(var(--stage-w) * 0.54), 320px);
+        --small-w: clamp(220px, calc(var(--stage-w) * 0.60), 340px);
+        --sub-w: clamp(170px, calc(var(--stage-w) * 0.36), 260px);
         /* ✅ tighter phones: pull it a bit further left */
         --sub-x: 0.64;
         --sub-y: 0.47;
@@ -2498,10 +2504,10 @@ code {
         --stage-w: calc(100vw - 18px);
         --stage-min-h: 920px;
         --stage-aspect: 1.78;
-        --title-w: clamp(200px, calc(var(--stage-w) * 0.46), 300px);
-        --main-w: clamp(250px, calc(var(--stage-w) * 0.62), 360px);
-        --small-w: clamp(260px, calc(var(--stage-w) * 0.72), 400px);
-        --sub-w: clamp(180px, calc(var(--stage-w) * 0.40), 280px);
+        --title-w: clamp(180px, calc(var(--stage-w) * 0.42), 280px);
+        --main-w: clamp(210px, calc(var(--stage-w) * 0.54), 320px);
+        --small-w: clamp(220px, calc(var(--stage-w) * 0.60), 340px);
+        --sub-w: clamp(170px, calc(var(--stage-w) * 0.36), 260px);
         --small-y: 0.18;
     }
 }
