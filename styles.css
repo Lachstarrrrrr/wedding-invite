@@ -1296,6 +1296,15 @@ code {
     color: var(--accent);
 }
 
+.family-date-lunar {
+    margin-top: 6px;
+    font-family: ui-serif, Georgia, "Times New Roman", Times, serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: .08em;
+    color: rgba(35,23,19,.58);
+}
+
 /* Directions */
 .family-directions {
     margin-top: 18px;

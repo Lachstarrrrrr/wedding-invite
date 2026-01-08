@@ -209,7 +209,7 @@
             "saveDate.the": "the",
             "saveDate.date": "DATE",
             "usNow.title": "Chúng mình hiện tại",
-            "usNow.subtitle": "Một chương mới trong cuộc sống của chúng mình.",
+            "usNow.subtitle": "Đây là một chương mới trong cuộc sống của chúng mình.",
             "childhood.sectionAria": "Ảnh hồi nhỏ",
             "childhood.title": "Khi Chúng Mình Còn Bé",
             "childhood.subtitle": "Một chút hồi ức trước ngày trọng đại.",
@@ -228,6 +228,7 @@
             "family.whenLabel": "Được tổ chức vào lúc",
             "family.whenMain": "10:30 - THỨ BẢY",
             "family.address": "1551 Lý Thái Tổ, Long Tân, Nhơn Trạch, Đồng Nai, Vietnam",
+            "family.lunarDate": "(06.12 AL)",
             "family.directionsAria": "Đi tới địa điểm",
             "family.directionsBtn": "CHỈ ĐƯỜNG",
             "story.sectionAria": "Câu chuyện",
@@ -251,7 +252,7 @@
                 "Tình yêu thuở bắt đầu bao giờ cũng ngọt ngào và lãng mạn, cùng nhau xem phim, du lịch, cùng cười, cùng buồn và ty tỷ những thứ lo âu về một mối quan hệ lâu bền, và những kế hoạch cho tương lai.",
             "story.y2024.title": "2024 - LỜI HỨA",
             "story.y2024.text":
-                "Càng đi cùng nhau, cả hai điều nhận thấy sự hiện diện của nữa kia trong cuộc sống của mình như một điều không thể thiếu, và được sắp đặt trước. Chúng mình đã bắt đầu nghiêm túc về mối quan hệ của cả hai... Dưới sự chấp thuận của gia đình hai bên, tình yêu của chúng mình như được chấp thêm đôi cánh.",
+                "Càng đi cùng nhau, cả hai đều nhận thấy sự hiện diện của nữa kia trong cuộc sống của mình như một điều không thể thiếu, và được sắp đặt trước. Chúng mình đã bắt đầu nghiêm túc về mối quan hệ của cả hai... Dưới sự chấp thuận của gia đình hai bên, tình yêu của chúng mình như được chấp thêm đôi cánh.",
             "story.y2025.title": "2025 - CẦU HÔN",
             "story.y2025.text":
                 "Một năm với nhiều điều trắc trở, những vui buồn, những bộn bề cứ lần lượt gõ cửa, nhưng rồi mọi thứ cũng trôi qua và chúng mình vẫn ở đây cùng nhau, có một nơi gọi là nhà, có một người luôn đợi ta trở về. Chúng mình đã có một buổi lễ kết hôn thân mật và ấp áp ở thành phố nhỏ Darwin nơi tình yêu của chúng mình bắt đầu và giờ 2026 đã đến dưới sự mong chờ và chúc phúc của mọi người ở Việt Nam một lễ cưới sẽ được tổ chức ấm áp tại gia đình chúng mình... và sự có mặt của Bạn, những người thân yêu của chúng mình vào hôm đấy sẽ là một trong những kỷ niệm đẹp mà chúng mình sẽ cất giữ mãi trên hành trình này. Cũng như việc hôm nay ngồi lại, viết về hành trình yêu thương của chúng mình và chia sẽ cùng Bạn. Thương Mến",
@@ -374,6 +375,7 @@
             "family.whenLabel": "Will be held at",
             "family.whenMain": "10:30AM SATURDAY",
             "family.address": "1551 Ly Thai To, Long Tan, Nhon Trach, Dong Nai, Vietnam",
+            "family.lunarDate": "(06.12 AL)",
             "family.directionsAria": "Go to location",
             "family.directionsBtn": "DIRECTIONS",
             "story.sectionAria": "Our story",
